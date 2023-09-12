@@ -1,38 +1,91 @@
-.App {
-  text-align: center;
+.budget {
+  display: flex;
+  background-color: #15202B; /* Тёмно-синий цвет фона */
+  color: #FFFFFF; /* Белый цвет текста */
+  height: 100vh; /* Высота на весь экран */
+  font-family: Arial, sans-serif; /* Шрифт */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.form-container {
+  flex: 0 0 200px;
+  padding: 20px; /* Отступы внутри формы */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.form-container form {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  max-width: 300px; /* Максимальная ширина формы */
+  margin: 0 auto; /* Центрирование формы по горизонтали */
 }
 
-.App-link {
-  color: #61dafb;
+.form-container label {
+  margin-bottom: 5px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.form-container input[type="text"],
+.form-container input[type="radio"] {
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.form-container button {
+  background-color: #007BFF; /* Цвет кнопки */
+  color: #FFFFFF; /* Цвет текста на кнопке */
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.form-container button:hover {
+  background-color: #0056b3; /* Цвет кнопки при наведении */
+}
+
+.info-container {
+  flex: 1; /* Расширяется на всю доступную ширину */
+  padding: 20px; /* Отступы внутри контейнера с информацией */
+  background-color: #007BFF;
+  display: flex;
+  flex-direction: row;
+}
+.transactions {
+  border-top: 2px solid gold;
+  border-left: 2px solid gold;
+  border-bottom: 2px solid gold;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.transactions li {
+  flex: 1;
+  background-color: bisque;
+  margin-bottom: 5px; /* Добавляем отступ между строками */
+  list-style-type: none; /* Убираем маркеры (точки) */
+  padding: 5px; /* Добавляем отступ внутри элемента списка */
+  border-bottom: 1px solid darkgoldenrod; /* Добавляем нижний бордюр */
+  margin-right: 10px;
+}
+
+.summary {
+  flex: 1;
+  border: 2px solid gold;
+  overflow-y: scroll;
+}
+
+.income {
+  flex: 1;
+  background-color: bisque;
+  color: green;
+}
+
+.expense {
+  flex: 1;
+  background-color: bisque;
+  color: red;
+}
+.transaction-details {
+  background-color: lightgray;
+  padding: 10px;
+  border: 1px solid gray;
 }
