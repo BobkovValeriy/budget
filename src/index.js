@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import axios from "axios";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-axios.defaults.baseURL = 'http://localhost:3001/';
+// axios.defaults.baseURL = 'https://my-budget-server-eveg.onrender.com';
 
 root.render(
   <React.StrictMode>

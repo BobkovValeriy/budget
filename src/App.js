@@ -1,15 +1,44 @@
 import './App.css';
 import axios from "axios";
 import { useState, useEffect } from "react";
+import Transaction from "./Transaction";
+import TransactionForm from "./TransactionForm"
 
 function App() {
   const [budget, setBudget] = useState([]);
   const [formData, setFormData] = useState({
     date: "",
-    amount: "",
+    amount: 0,
     type: "Доход",
-    transactionType: [], // Изменяем на массив для хранения типов транзакций
+    transactionType: [],
   });
+  const [transactionTypesArray, setTransactionTypesArray] = useState([]);
+
+  const apiKey = 'j08dKufx7DBLf8rR5wJAg2pH2aieuCeGF4frCNPFOdBoInQVhrvHpNLidw9upVjn';
+  const apiUrl = 'https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/data/v1/action/find';
+
+  useEffect(() => {
+    axios
+      .get(apiUrl, {
+        params: {
+          collection: "budgetrecords",
+          database: "budget",
+          dataSource: "Cluster0",
+          projection: { "_id": 1 }
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Request-Headers': '*',
+          'api-key': apiKey,
+        },
+      })
+      .then((response) => {
+        setBudget(response.data);
+      })
+      .catch((error) => {
+        console.error('Ошибка при получении данных из базы данных:', error);
+      });
+  }, [apiKey, apiUrl]);  // Добавим зависимости, чтобы useEffect перезапускался при изменении apiKey или apiUrl
 
   const totalIncome = budget.reduce((total, transaction) => {
     return transaction.type === "Доход" ? total + Number(transaction.amount) : total;
@@ -31,29 +60,21 @@ function App() {
 
   const remain = totalIncome - totalExpense;
 
-  const [selectedTransaction, setSelectedTransaction] = useState(null);
-  const [transactionTypesArray, setTransactionTypesArray] = useState([]);
-
-  useEffect(() => {
-    // Выполнить GET-запрос при загрузке компонента
-    axios.get('/api/get-records')
-      .then((response) => {
-        // Установить данные из ответа в состояние
-        setBudget(response.data);
-      })
-      .catch((error) => {
-        console.error("Ошибка при получении данных из базы данных:", error);
-      });
-  }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "transactionType") {
-      const transactionTypesArray = value.split(","); //.map((item) => item.trim())
+      const transactionTypesArray = value.split(",");
+      let total = parseFloat(0);
+      transactionTypesArray.forEach((transaction) => {
+        const [typeName, typePrice] = transaction.split(":").map((item) => item.trim());
+        total += parseFloat(typePrice)
+      })
       setFormData({
         ...formData,
         [name]: transactionTypesArray,
+        amount: total,
       });
+      setTransactionTypesArray(transactionTypesArray);
     } else {
       setFormData({
         ...formData,
@@ -65,17 +86,26 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Создаем новую транзакцию и добавляем ее к массиву budget
     const newTransaction = {
       date: formData.date,
       amount: formData.amount,
       type: formData.type,
-      transactionType: formData.transactionType, // Отправляем массив типов транзакций
+      transactionType: formData.transactionType,
     };
     setBudget([...budget, newTransaction]);
 
-    // Отправляем данные на сервер
-    axios.post('/api/add-record', formData)
+    axios.post(apiUrl, {
+      collection: "budgetrecords",
+      database: "budget",
+      dataSource: "Cluster0",
+      documents: [newTransaction]
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Request-Headers': '*',
+        'api-key': apiKey,
+      },
+    })
       .then(response => {
         console.log("Запись успешно добавлена.");
       })
@@ -83,97 +113,34 @@ function App() {
         console.error("Ошибка при добавлении записи:", error);
       });
 
-    // Очищаем поля формы после добавления записи
     setFormData({
       date: "",
       amount: "",
       type: "Доход",
-      transactionType: [], // Очищаем массив типов транзакций
+      transactionType: [],
     });
+    setTransactionTypesArray([]);
   };
-
   return (
     <div className="budget">
-      <div className="form-container">
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="date">Дата:</label>
-            <input
-              type="text"
-              id="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="amount">Сумма:</label>
-            <input
-              type="text"
-              id="amount"
-              name="amount"
-              value={formData.amount}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <label>Тип:</label>
-            <label>
-              <input
-                type="radio"
-                name="type"
-                value="Доход"
-                checked={formData.type === "Доход"}
-                onChange={handleChange}
-              />
-              Доход
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="type"
-                value="Расход"
-                checked={formData.type === "Расход"}
-                onChange={handleChange}
-              />
-              Расход
-            </label>
-          </div>
-          <div>
-            <label htmlFor="transactionType">Тип транзакции (разделяйте запятыми):</label>
-            <textarea
-              id="transactionType"
-              name="transactionType"
-              value={formData.transactionType}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <button type="submit">Добавить запись</button>
-        </form>
-      </div>
+      <TransactionForm
+        handleSubmit={handleSubmit}
+        handleChange={handleChange}
+        formData={formData}
+      />
       <div className="info-container">
         <div className='transactions'>
           <h2>Список транзакций:</h2>
           <ul>
             {budget.map((transaction, index) => (
-              <li
+              <Transaction
                 key={index}
-                className={transaction.type === "Доход" ? "income" : "expense"}
-                onClick={() => {
-                  setSelectedTransaction(transaction);
-                  setTransactionTypesArray(transaction.transactionType);
-                }}
-              >
-                Дата: {transaction.date}, Сумма: {transaction.amount}
-                {selectedTransaction && selectedTransaction === transaction && (
-                  <div className="transaction-details">
-                    Расшифровка: {selectedTransaction.transactionType.join(", ")}
-                  </div>
-                )}
-              </li>
+                transaction={transaction}
+                setTransactionTypesArray={setTransactionTypesArray}
+                formData={formData}
+                setFormData={setFormData}
+                handleChange={handleChange}
+              />
             ))}
           </ul>
         </div>
@@ -183,11 +150,13 @@ function App() {
           <div>Остаток: {remain} </div>
           <div>Общие затраты по типам:</div>
           <ul>
-            {Object.entries(totalExpensesByType).map(([type, total]) => (
-              <li key={type}>
-                Трата: {type}, Общая сумма: {total};
-              </li>
-            ))}
+            {Object.entries(totalExpensesByType)
+              .sort(([, totalA], [, totalB]) => totalB - totalA) // Сортировка по убыванию total
+              .map(([type, total]) => (
+                <li key={type}>
+                  {type}: {total}
+                </li>
+              ))}
           </ul>
         </div>
       </div>
