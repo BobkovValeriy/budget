@@ -1,0 +1,42 @@
+.editing-transaction {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); // Затемнение фона
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; // Задайте значение z-index, чтобы убедиться, что модальное окно отображается поверх остальных элементов
+
+  .form-container {
+    background-color: #173451; // Цвет фона формы
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+
+  form {
+    // Добавьте дополнительные стили формы при необходимости
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  input,
+  textarea,
+  button {
+    padding: 8px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+}

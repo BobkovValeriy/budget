@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import Transaction from "./Transaction";
 import TransactionForm from "./TransactionForm"
+import EditTransaction from './editTransaction';
 
 function App() {
   const [budget, setBudget] = useState([]);
@@ -13,6 +14,8 @@ function App() {
     transactionType: [], // Изменяем на массив для хранения типов транзакций
   });
   const [transactionTypesArray, setTransactionTypesArray] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTransction, setEditTransaction] = useState();
 
   const totalIncome = budget.reduce((total, transaction) => {
     return transaction.type === "Доход" ? total + Number(transaction.amount) : total;
@@ -23,14 +26,21 @@ function App() {
   }, 0);
 
   const totalExpensesByType = {};
-  budget.forEach((transaction) => {
-    if (transaction.type === "Расход") {
-      transaction.transactionType.forEach((type) => {
-        const [typeName, typePrice] = type.split(":").map((item) => item.trim());
-        totalExpensesByType[typeName] = (totalExpensesByType[typeName] || 0) + Number(typePrice);
-      });
-    }
-  });
+  function recompileBudget() {
+    budget.forEach((transaction) => {
+      if (transaction.type === "Расход") {
+        transaction.transactionType.forEach((type) => {
+          const [typeName, typePrice] = type.split(":").map((item) => item.trim());
+          totalExpensesByType[typeName] = (totalExpensesByType[typeName] || 0) + Number(typePrice);
+        });
+      }
+    });
+  }
+  recompileBudget()
+  useEffect(() => {
+    recompileBudget()
+  }, [budget])
+
 
   const remain = totalIncome - totalExpense;
 
@@ -40,7 +50,6 @@ function App() {
     // Выполнить GET-запрос при загрузке компонента
     axios.get('https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/getbudget')
       .then((response) => {
-        console.log(response)
         setBudget(response.data);
       })
       .catch((error) => {
@@ -82,9 +91,13 @@ function App() {
     };
     setBudget([...budget, newTransaction]);
 
-    // Отправляем данные на сервер
-    console.log(formData)
-    axios.post('https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/addrecord', formData)
+    axios.post('https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/addrecord', newTransaction,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
       .then(response => {
         console.log("Запись успешно добавлена.");
       })
@@ -100,6 +113,27 @@ function App() {
       transactionType: [], // Очищаем массив типов транзакций
     });
   };
+  const compareDatesAsc = (a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+
+    return dateA - dateB;
+  };
+
+  // Функция для сравнения строковых дат в порядке убывания
+  const compareDatesDesc = (a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+
+    return dateB - dateA;
+  };
+
+  // Пример использования
+  const sortBudget = (ascending) => {
+    const sortedBudget = [...budget];
+    sortedBudget.sort(ascending ? compareDatesAsc : compareDatesDesc);
+    setBudget(sortedBudget);
+  };
 
   return (
     <div className="budget">
@@ -107,19 +141,24 @@ function App() {
         handleSubmit={handleSubmit}
         handleChange={handleChange}
         formData={formData}
+        buttonText="Добавить"
       />
       <div className="info-container">
         <div className='transactions'>
           <h2>Список транзакций:</h2>
+          <button onClick={() => sortBudget(true)}>Сначала старые</button>
+          <button onClick={() => sortBudget(false)}>Сначала новые</button>
           <ul>
             {budget.map((transaction, index) => (
               <Transaction
                 key={index}
                 transaction={transaction}
                 setTransactionTypesArray={setTransactionTypesArray}
-                formData={formData}
                 setFormData={setFormData}
                 handleChange={handleChange}
+                setIsEditing={setIsEditing}
+                setEditTransaction={setEditTransaction}
+                isEditing={isEditing}
               />
             ))}
           </ul>
@@ -140,6 +179,12 @@ function App() {
           </ul>
         </div>
       </div>
+      {isEditing && <EditTransaction
+        transactionData={editTransction}
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+        setBudget={setBudget}
+      />}
     </div>
   );
 }
