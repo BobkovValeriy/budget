@@ -105,3 +105,28 @@
 .record-sum{
   padding-left: 30px;
 }
+@media (max-width: 768px) {
+  .budget {
+    flex-direction: column; /* Изменяем направление flex-контейнера на вертикальное */
+  }
+
+  .form-container {
+    flex: 1; /* Занимает все доступное пространство на маленьких экранах */
+    max-width: none; /* Убираем максимальную ширину формы */
+  }
+
+  .info-container {
+    flex-direction: column; /* Изменяем направление flex-контейнера на вертикальное */
+  }
+
+  .transactions,
+  .summary {
+    flex: none; /* Отменяем расширение на всю ширину для transactions и summary */
+  }
+  .transactions{
+  border-top: 2px solid gold;
+  border-left: 2px solid gold;
+  border-right: 2px solid gold;
+  border-bottom: none;
+  }
+}

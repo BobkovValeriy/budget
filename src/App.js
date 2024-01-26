@@ -114,21 +114,18 @@ function App() {
     });
   };
   const compareDatesAsc = (a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
+    const dateA = new Date(a.date).getTime();
+    const dateB = new Date(b.date).getTime();
 
     return dateA - dateB;
   };
-
-  // Функция для сравнения строковых дат в порядке убывания
   const compareDatesDesc = (a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
+    const dateA = new Date(a.date).getTime();
+    // console.log(new Date(a.date), dateA)
+    const dateB = new Date(b.date).getTime();
 
     return dateB - dateA;
   };
-
-  // Пример использования
   const sortBudget = (ascending) => {
     const sortedBudget = [...budget];
     sortedBudget.sort(ascending ? compareDatesAsc : compareDatesDesc);
