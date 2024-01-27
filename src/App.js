@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Transaction from "./Transaction";
 import TransactionForm from "./TransactionForm"
 import EditTransaction from './editTransaction';
+import DeleteTransaction from './DeleteTransaction';
 
 function App() {
   const [budget, setBudget] = useState([]);
@@ -15,6 +16,7 @@ function App() {
   });
   const [transactionTypesArray, setTransactionTypesArray] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [editTransction, setEditTransaction] = useState();
 
   const totalIncome = budget.reduce((total, transaction) => {
@@ -143,9 +145,11 @@ function App() {
       <div className="info-container">
         <div className='transactions'>
           <h2>Список транзакций:</h2>
-          <button onClick={() => sortBudget(true)}>Сначала старые</button>
-          <button onClick={() => sortBudget(false)}>Сначала новые</button>
-          <ul>
+          <div className='transaction-controls'>
+            <button onClick={() => sortBudget(true)}>Сначала старые</button>
+            <button onClick={() => sortBudget(false)}>Сначала новые</button>
+          </div>
+          <ul className='transactions-records'>
             {budget.map((transaction, index) => (
               <Transaction
                 key={index}
@@ -156,6 +160,7 @@ function App() {
                 setIsEditing={setIsEditing}
                 setEditTransaction={setEditTransaction}
                 isEditing={isEditing}
+                setIsDeleting={setIsDeleting}
               />
             ))}
           </ul>
@@ -180,6 +185,11 @@ function App() {
         transactionData={editTransction}
         isEditing={isEditing}
         setIsEditing={setIsEditing}
+        setBudget={setBudget}
+      />}
+      {isDeleting && <DeleteTransaction
+        setIsDeleting={setIsDeleting}
+        transactionData={editTransction}
         setBudget={setBudget}
       />}
     </div>

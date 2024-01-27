@@ -1,5 +1,7 @@
 import './App.css';
 import { useState } from "react";
+import { FaEdit } from "react-icons/fa";
+import { RiDeleteBin2Fill } from "react-icons/ri";
 
 function Transaction({
   transaction,
@@ -8,6 +10,7 @@ function Transaction({
   setIsEditing,
   setEditTransaction,
   isEditing,
+  setIsDeleting,
 }) {
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [showTransaction, setShowTransaction] = useState(false);
@@ -22,13 +25,17 @@ function Transaction({
     setIsEditing(!isEditing);
     setEditTransaction(transaction);
   }
+  function deleteRecord(e) {
+    e.preventDefault();
+    setIsDeleting(true);
+    setEditTransaction(transaction);
+  }
 
   return (
     <li className={transaction.type === "Доход" ? "income" : "expense"}>
       <div className="record-wrapper">
         <button onClick={(e) => editRecord(e)} className="change-record">
-          {" "}
-          Редактировать
+          <FaEdit />
         </button>
         <span
           className="record-sum"
@@ -40,6 +47,9 @@ function Transaction({
           {" "}
           Дата: {transaction.date}, Сумма: {transaction.amount}
         </span>
+        <button onClick={(e) => deleteRecord(e)} className="delete-record">
+          <RiDeleteBin2Fill />
+        </button>
       </div>
       {showTransaction &&
         selectedTransaction &&
