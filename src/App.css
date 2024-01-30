@@ -10,6 +10,11 @@
   flex: 0 0 200px;
   padding: 20px; /* Отступы внутри формы */
 }
+.form-container input[type="text"],
+.form-container textarea {
+  background-color: #fff;
+  color: #000; 
+}
 
 .form-container form {
   display: flex;
