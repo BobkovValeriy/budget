@@ -5,9 +5,10 @@ import TransactionForm from "./TransactionForm";
 import EditTransaction from "./editTransaction";
 import DeleteTransaction from "./DeleteTransaction";
 function LoginedApp() {
+  const now = new Date();
   const [budget, setBudget] = useState([]);
   const [formData, setFormData] = useState({
-    date: "",
+    date: `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}`,
     amount: 0,
     type: "Доход",
     transactionType: [], // Изменяем на массив для хранения типов транзакций
