@@ -14,7 +14,7 @@ function TransactionForm({
         <div>
           <label htmlFor="date">Дата:</label>
           <input
-            type="text"
+            type="date"
             id="date"
             name="date"
             value={date}
