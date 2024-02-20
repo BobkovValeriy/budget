@@ -6,11 +6,12 @@ import EditTransaction from "./editTransaction";
 import DeleteTransaction from "./DeleteTransaction";
 function LoginedApp() {
   const now = new Date();
+  const formattedDate = now.toISOString().split("T")[0];
   const [budget, setBudget] = useState([]);
   const [formData, setFormData] = useState({
-    date: `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}`,
+    date: formattedDate,
     amount: 0,
-    type: "Доход",
+    type: "Расход",
     transactionType: [], // Изменяем на массив для хранения типов транзакций
   });
   const [transactionTypesArray, setTransactionTypesArray] = useState([]);

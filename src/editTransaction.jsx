@@ -42,6 +42,9 @@ function EditTransaction({
   };
   const apiEndpoint =
     "https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/";
+  const closeEditing = () => {
+    setIsEditing(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,6 +82,17 @@ function EditTransaction({
         handleChange={changeTransactionData}
         formData={dataFormForChange}
         buttonText="обновить"
+        exitButton={
+          <div className="exit-button__wrapper">
+            <button
+              className="exit-button"
+              type="button"
+              onClick={closeEditing}
+            >
+              отмена
+            </button>
+          </div>
+        }
       />
     </div>
   );

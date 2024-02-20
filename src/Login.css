@@ -29,6 +29,8 @@
 .login-form input {
   padding: 5px;
   margin-bottom: 10px;
+  background-color: #fff;
+  color: #000; 
 }
 
 .login-form button {

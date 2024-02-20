@@ -5,11 +5,13 @@ function TransactionForm({
   handleChange,
   formData = {},
   buttonText,
+  exitButton = null,
 }) {
   const { date = "", type = "Доход", transactionType = "" } = formData;
 
   return (
     <div className="form-container">
+      {exitButton}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="date">Дата:</label>
@@ -28,21 +30,21 @@ function TransactionForm({
             <input
               type="radio"
               name="type"
-              value="Доход"
-              checked={type === "Доход"}
-              onChange={handleChange}
-            />
-            Доход
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="type"
               value="Расход"
               checked={type === "Расход"}
               onChange={handleChange}
             />
             Расход
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="type"
+              value="Доход"
+              checked={type === "Доход"}
+              onChange={handleChange}
+            />
+            Доход
           </label>
         </div>
         <div>

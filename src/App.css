@@ -11,6 +11,7 @@
   padding: 20px; /* Отступы внутри формы */
 }
 .form-container input[type="text"],
+.form-container input[type="date"],
 .form-container textarea {
   background-color: #fff;
   color: #000; 

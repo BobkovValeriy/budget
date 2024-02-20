@@ -18,7 +18,6 @@
   }
 
   form {
-    // Добавьте дополнительные стили формы при необходимости
   }
 
   label {
@@ -36,7 +35,16 @@
 
   button {
     background-color: #007bff;
+    border-radius: 4px;
     color: #fff;
     cursor: pointer;
+  }
+  .exit-button__wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .exit-button{
+    width: 200px;
   }
 }
