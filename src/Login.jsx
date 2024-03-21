@@ -1,8 +1,21 @@
-import { useState } from "react";
 import "./Login.css";
 import axios from "axios";
+import { useState } from "react";
 
-  async function checkLogin(username, password, setLogined) {
+function Login({
+  setLogined,
+  setUsername,
+  setPassword,
+  username,
+  pass,
+  setShowLoginMenu,
+  setShowRegisterMenu,
+}) {
+  const [message, setMessage] = useState([]);
+  function addErrorMessage(mess) {
+    setMessage((prev) => [...prev, mess]);
+  }
+  async function checkLogin(username, password, setLogined, setShowLoginMenu) {
     try {
       console.log(username, password);
       const apiEndpoint = `https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/checklogin?username=${encodeURIComponent(
@@ -15,9 +28,14 @@ import axios from "axios";
 
       // Проверяем, успешен ли запрос и код в ответе равен "logined"
       if (response.data.login === "logined") {
-        return setLogined(true);
+        // Устанавливаем состояния в соответствии с успешным входом
+        setLogined(true);
+        setShowLoginMenu(false);
+        // Возвращаем null, так как нет данных для возврата
+        return null;
       } else if (response.data.login === "notlogined") {
         console.error("Неверные учетные данные");
+        addErrorMessage("Неверные учетные данные");
         return { error: "Неверные учетные данные" };
       } else {
         console.error("Некорректный ответ от сервера", response.data);
@@ -28,45 +46,60 @@ import axios from "axios";
       return { error: error.message };
     }
   }
-
-function Login({ logined, setLogined }) {
-  const [userName, setUserName] = useState("");
-  const [userPass, setUserPass] = useState("");
-
   async function verification(e) {
     e.preventDefault();
-    await checkLogin(userName, userPass, setLogined);
+    setMessage([]);
+    await checkLogin(username, pass, setLogined, setShowLoginMenu);
   }
 
   function userNameChange(e) {
-    setUserName(e.target.value);
+    setUsername(e.target.value);
   }
 
   function userPassChange(e) {
-    setUserPass(e.target.value);
+    setPassword(e.target.value);
+  }
+  function showRegistrationMenu(e) {
+    e.preventDefault();
+    setShowLoginMenu(false);
+    setShowRegisterMenu(true);
   }
 
   return (
     <div className="login">
-      <form className="login-form" onSubmit={verification}>
-        <label htmlFor="username">Имя пользователя:</label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          onChange={userNameChange}
-        />
+      <div className="login-container">
+        <button
+          type="button"
+          onClick={showRegistrationMenu}
+          className="login__nav-button"
+        >
+          Регистрация
+        </button>
+        <form className="login-form" onSubmit={verification}>
+          <label htmlFor="username">Имя пользователя:</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            onChange={userNameChange}
+          />
 
-        <label htmlFor="password">Пароль:</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          onChange={userPassChange}
-        />
+          <label htmlFor="password">Пароль:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            onChange={userPassChange}
+          />
 
-        <button type="submit">Войти</button>
-      </form>
+          <button type="submit">Войти</button>
+        </form>
+        <div className="error-message">
+          {message.map((mess, index) => {
+            return <div key={index}>{mess}</div>;
+          })}
+        </div>
+      </div>
     </div>
   );
 }

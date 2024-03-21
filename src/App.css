@@ -163,8 +163,12 @@
     flex-direction: column; /* Изменяем направление flex-контейнера на вертикальное */
   }
 
-  .transactions,
+  .transactions{
+    flex: none;
+    order:2
+  }
   .summary {
+    order:1;
     flex: none; /* Отменяем расширение на всю ширину для transactions и summary */
   }
   .transactions{

@@ -1,6 +1,7 @@
-  .login{
+  .register{
   margin: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
@@ -8,57 +9,56 @@
   color: #FFFFFF;
   /* background: rgba(0, 0, 0, 0.5); */
   }
-.login-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  max-width: 300px;
-  min-width: 300px;
-  height: 100vh; /* Высота на весь экран */
-}
 
-.login-form {
+.register-form {
   display: flex;
   flex-direction: column;
+  max-width: 300px;
   min-width: 300px;
   margin: 20px;
 }
 
-.login-form label {
+.register-form label {
   margin-bottom: 5px;
 }
 
-.login-form input {
+.register-form input {
   padding: 5px;
   margin-bottom: 10px;
   background-color: #fff;
   color: #000; 
 }
 
-.login-form button {
+.register-form button {
   background-color: #007BFF;
   color: #FFFFFF;
   border: none;
   padding: 10px 15px;
   cursor: pointer;
 }
-.login__nav-button:hover,
-.login-form button:hover {
+.register__nav-button{
+  background-color: #007BFF;
+  color: #FFFFFF;
+  border: none;
+  max-width: 300px;
+  min-width:300px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+.register__nav-button:hover,
+.register-form button:hover {
   background-color: #0056b3;
-}
-.login__nav-button{
-  background-color: #007BFF;
-  color: #FFFFFF;
-  border: none;
-  min-width: 300px;
-  flex: 0 1 40px;
-  padding: 10px 15px;
-  cursor: pointer;
 }
 .error-message{
   flex: 0 1 200px;
   display:flex;
   flex-direction: column;
   color: red;
+}
+.recaptcha-container iframe{
+  width: 300px;
+  height: 78px;
+}
+.submit-button{
+  margin-top: 10px;
 }

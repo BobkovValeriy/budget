@@ -4,10 +4,11 @@ import Transaction from "./Transaction";
 import TransactionForm from "./TransactionForm";
 import EditTransaction from "./editTransaction";
 import DeleteTransaction from "./DeleteTransaction";
-function LoginedApp() {
+function LoginedApp({ username, password }) {
   const now = new Date();
   const formattedDate = now.toISOString().split("T")[0];
   const [budget, setBudget] = useState([]);
+  const [recievedData, setRecievedData] = useState(false);
   const [formData, setFormData] = useState({
     date: formattedDate,
     amount: 0,
@@ -45,6 +46,7 @@ function LoginedApp() {
       }
     });
   }
+
   recompileBudget();
   useEffect(() => {
     recompileBudget();
@@ -60,6 +62,7 @@ function LoginedApp() {
       )
       .then((response) => {
         setBudget(response.data);
+        setRecievedData(true);
       })
       .catch((error) => {
         console.error("Ошибка при получении данных из базы данных:", error);
@@ -121,9 +124,8 @@ function LoginedApp() {
 
     // Очищаем поля формы после добавления записи
     setFormData({
-      date: "",
       amount: "",
-      type: "Доход",
+      type: "Расход",
       transactionType: [], // Очищаем массив типов транзакций
     });
   };
@@ -145,6 +147,11 @@ function LoginedApp() {
     sortedBudget.sort(ascending ? compareDatesAsc : compareDatesDesc);
     setBudget(sortedBudget);
   };
+  useEffect(() => {
+    if (recievedData) {
+      sortBudget(false);
+    }
+  }, [recievedData]);
 
   return (
     <div className="budget">
