@@ -1,78 +1,84 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import Transaction from "./Transaction";
-import TransactionForm from "./TransactionForm";
-import EditTransaction from "./editTransaction";
-import DeleteTransaction from "./DeleteTransaction";
+import Transaction from "../Transaction";
+import TransactionForm from "../TransactionForm";
+import EditTransaction from "../editTransaction";
+import DeleteTransaction from "../DeleteTransaction";
+import { downloadBudget } from "../engine";
+
 function LoginedApp({ username, password }) {
   const now = new Date();
   const formattedDate = now.toISOString().split("T")[0];
   const [budget, setBudget] = useState([]);
-  const [recievedData, setRecievedData] = useState(false);
+  const [receivedData, setReceivedData] = useState(false);
   const [formData, setFormData] = useState({
     date: formattedDate,
     amount: 0,
     type: "Расход",
-    transactionType: [], // Изменяем на массив для хранения типов транзакций
+    transactionType: [],
   });
   const [transactionTypesArray, setTransactionTypesArray] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [editTransction, setEditTransaction] = useState();
+  const [editTransaction, setEditTransaction] = useState();
+  const [totalExpensesByType, setTotalExpenseByType] = useState({});
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [totalExpense, setTotalExpense] = useState(0);
+  const [remain, setRemain] = useState(0);
 
-  const totalIncome = budget.reduce((total, transaction) => {
-    return transaction.type === "Доход"
-      ? total + Number(transaction.amount)
-      : total;
-  }, 0);
+  useEffect(() => {
+    setRemain(totalIncome - totalExpense);
+  }, [totalIncome, totalExpense]);
 
-  const totalExpense = budget.reduce((total, transaction) => {
-    return transaction.type === "Расход"
-      ? total + Number(transaction.amount)
-      : total;
-  }, 0);
+  function compileIncome(budget) {
+    return budget.reduce((total, transaction) => {
+      return transaction.type === "Доход"
+        ? total + Number(transaction.amount)
+        : total;
+    }, 0);
+  }
 
-  const totalExpensesByType = {};
+  function compileTotalExpense(budget) {
+    return budget.reduce((total, transaction) => {
+      return transaction.type === "Расход"
+        ? total + Number(transaction.amount)
+        : total;
+    }, 0);
+  }
+
   function recompileBudget() {
+    const newTotalExpensesByType = {};
+
     budget.forEach((transaction) => {
       if (transaction.type === "Расход") {
         transaction.transactionType.forEach((type) => {
           const [typeName, typePrice] = type
             .split(":")
             .map((item) => item.trim());
-          totalExpensesByType[typeName] =
-            (totalExpensesByType[typeName] || 0) + Number(typePrice);
+          newTotalExpensesByType[typeName] =
+            (newTotalExpensesByType[typeName] || 0) + Number(typePrice);
         });
       }
     });
+
+    setTotalIncome(compileIncome(budget));
+    setTotalExpense(compileTotalExpense(budget));
+    setTotalExpenseByType(newTotalExpensesByType);
   }
 
-  recompileBudget();
   useEffect(() => {
     recompileBudget();
+    setRemain(totalIncome - totalExpense);
   }, [budget]);
 
-  const remain = totalIncome - totalExpense;
-
   useEffect(() => {
-    // Выполнить GET-запрос при загрузке компонента
-    axios
-      .get(
-        "https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/getbudget"
-      )
-      .then((response) => {
-        setBudget(response.data);
-        setRecievedData(true);
-      })
-      .catch((error) => {
-        console.error("Ошибка при получении данных из базы данных:", error);
-      });
+    downloadBudget(username, password, setBudget, setReceivedData);
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "transactionType") {
-      const transactionTypesArray = value.split(","); //.map((item) => item.trim())
+      const transactionTypesArray = value.split(",");
       let total = parseFloat(0);
       transactionTypesArray.forEach((transaction) => {
         const [typeName, typePrice] = transaction
@@ -96,19 +102,23 @@ function LoginedApp({ username, password }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Создаем новую транзакцию и добавляем ее к массиву budget
     const newTransaction = {
+      id: new Date(), // Генерируем номер для новой транзакции
       date: formData.date,
       amount: formData.amount,
       type: formData.type,
-      transactionType: formData.transactionType, // Отправляем массив типов транзакций
+      transactionType: formData.transactionType,
     };
-    setBudget([...budget, newTransaction]);
 
+    // Добавляем новую транзакцию на сервер
     axios
       .post(
         "https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/addrecord",
-        newTransaction,
+        {
+          userName: username,
+          password: password,
+          transaction: newTransaction,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -116,42 +126,50 @@ function LoginedApp({ username, password }) {
         }
       )
       .then((response) => {
-        console.log("Запись успешно добавлена.");
+        if (response.data.status === "success") {
+          console.log(response.data.message);
+          // Обновляем состояние бюджета после успешного добавления транзакции
+          setBudget([...budget, newTransaction]);
+        } else {
+          console.error(response.data.message);
+        }
       })
       .catch((error) => {
-        console.error("Ошибка при добавлении записи:", error);
+        console.error("Ошибка при добавлении транзакции:", error);
       });
 
-    // Очищаем поля формы после добавления записи
+    // Очищаем поля формы после добавления транзакции
     setFormData({
+      date: formattedDate,
       amount: "",
       type: "Расход",
-      transactionType: [], // Очищаем массив типов транзакций
+      transactionType: [],
     });
   };
+
   const compareDatesAsc = (a, b) => {
     const dateA = new Date(a.date).getTime();
     const dateB = new Date(b.date).getTime();
-
     return dateA - dateB;
   };
+
   const compareDatesDesc = (a, b) => {
     const dateA = new Date(a.date).getTime();
-    // console.log(new Date(a.date), dateA)
     const dateB = new Date(b.date).getTime();
-
     return dateB - dateA;
   };
+
   const sortBudget = (ascending) => {
     const sortedBudget = [...budget];
     sortedBudget.sort(ascending ? compareDatesAsc : compareDatesDesc);
     setBudget(sortedBudget);
   };
+
   useEffect(() => {
-    if (recievedData) {
+    if (receivedData) {
       sortBudget(false);
     }
-  }, [recievedData]);
+  }, [receivedData]);
 
   return (
     <div className="budget">
@@ -202,20 +220,27 @@ function LoginedApp({ username, password }) {
       </div>
       {isEditing && (
         <EditTransaction
-          transactionData={editTransction}
+          transactionData={editTransaction}
           isEditing={isEditing}
           setIsEditing={setIsEditing}
+          setReceivedData={setReceivedData}
           setBudget={setBudget}
+          username={username}
+          password={password}
         />
       )}
       {isDeleting && (
         <DeleteTransaction
           setIsDeleting={setIsDeleting}
-          transactionData={editTransction}
+          transactionData={editTransaction}
+          setReceivedData={setReceivedData}
           setBudget={setBudget}
+          username={username}
+          password={password}
         />
       )}
     </div>
   );
 }
+
 export default LoginedApp;

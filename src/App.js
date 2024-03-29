@@ -1,5 +1,5 @@
 import './App.css';
-import LoginedApp from './LoginedApp';
+import LoginedApp from './loginedAppBudget/LoginedApp';
 import Login from './Login';
 import { useState } from 'react';
 import Registration from './registration/Registration';

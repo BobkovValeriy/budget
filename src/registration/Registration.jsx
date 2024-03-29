@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import "./Registration.scss";
-import ReCAPTCHA from "react-google-recaptcha";
+import styles from "./Registration.module.scss";
+// import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
 
 function Registration({
@@ -32,8 +32,8 @@ function Registration({
           {
             userName: username,
             userPass: password,
-            passCheck: passCheck,
-            captchaValue: captchaValue,
+            // passCheck: passCheck,
+            // captchaValue: captchaValue,
           }
         );
         console.log(response);
@@ -104,24 +104,24 @@ function Registration({
     if (!specialChars.test(password)) {
       addErrorMessage("Пароль может содержать только буквы и цифры.");
     }
-    if (!captchaValue) {
-      addErrorMessage("Докажите что вы не робот.");
-    }
+    // if (!captchaValue) {
+    //   addErrorMessage("Докажите что вы не робот.");
+    // }
     if (message.length === 0) {
       setCanRegister(true);
     }
   }, [passCheck, password, username, captchaValue]);
 
   return (
-    <div className="register">
+    <div className={styles.register}>
       <button
         type="button"
         onClick={showLogin}
-        className="register__nav-button"
+        className={styles.register__nav__button}
       >
         Вход
       </button>
-      <form className="register-form" onSubmit={handleRegistration}>
+      <form className={styles.register__form} onSubmit={handleRegistration}>
         <label htmlFor="username">Имя пользователя:</label>
         <input
           type="text"
@@ -146,19 +146,19 @@ function Registration({
           onChange={passCheckChange}
         />
 
-        <div className="recaptcha-container">
+        {/* <div className="recaptcha-container">
           <ReCAPTCHA
             sitekey="6Lf_l58pAAAAAK9rxsWT8fLox4tPWf2ioDn5D9lV"
             onChange={onChangeCapthca}
           />
-        </div>
+        </div> */}
 
-        <button type="submit" className="submit-button">
+        <button type="submit" className={styles.submit__button}>
           Регистрация
         </button>
       </form>
 
-      <div className="error-message">
+      <div className={styles.error__message}>
         {message.map((mess, index) => {
           return <div key={index}>{mess}</div>;
         })}

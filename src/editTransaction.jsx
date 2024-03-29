@@ -3,14 +3,18 @@ import "./editTransaction.scss";
 import { useState } from "react";
 import TransactionForm from "./TransactionForm";
 import axios from "axios";
+import { downloadBudget } from "./engine";
 
 function EditTransaction({
   transactionData,
+  setReceivedData,
   isEditing,
   setIsEditing,
   setBudget,
+  username,
+  password,
 }) {
-  let { amount, date, transactionType, type, _id } = transactionData;
+  let { amount, date, transactionType, type, id } = transactionData;
   const [dataFormForChange, setDataFormForChange] = useState({
     date: date,
     amount: amount,
@@ -52,21 +56,24 @@ function EditTransaction({
     try {
       // Отправка данных на обновление записи
       const updateResponse = await axios.post(
-        apiEndpoint + "changeBudgetRecord",
+        `${apiEndpoint}changeBudgetRecord`,
         {
-          _id: _id,
-          date: dataFormForChange.date,
-          amount: dataFormForChange.amount,
-          type: dataFormForChange.type,
-          transactionType: dataFormForChange.transactionType,
+          userName: username,
+          password: password,
+          transaction: {
+            id: id,
+            date: dataFormForChange.date,
+            amount: parseFloat(dataFormForChange.amount),
+            type: dataFormForChange.type,
+            transactionType: dataFormForChange.transactionType,
+          },
         }
       );
 
       console.log("Запись успешно обновлена!", updateResponse.data);
 
       // Получение бюджета после успешного обновления
-      const budgetResponse = await axios.get(apiEndpoint + "getbudget");
-      setBudget(budgetResponse.data);
+      downloadBudget(username, password, setBudget, setReceivedData);
     } catch (error) {
       // Обработка ошибок
       console.error("Ошибка при обновлении записи:", error);
