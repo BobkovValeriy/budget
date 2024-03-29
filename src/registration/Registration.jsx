@@ -23,10 +23,11 @@ function Registration({
 
   async function handleRegistration(e) {
     e.preventDefault();
-    console.log("Try to register");
+    // console.log("Try to register");
+    // console.log(username, password, canRegister);
     if (canRegister) {
       try {
-        setMessage([]);
+        //setMessage([]);
         const response = await axios.post(
           "https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/add_budget_user",
           {
@@ -36,7 +37,7 @@ function Registration({
             // captchaValue: captchaValue,
           }
         );
-        console.log(response);
+        // console.log(response);
         if (response.data.success) {
           // Регистрация прошла успешно
           setLogined(true);
@@ -66,12 +67,12 @@ function Registration({
 
   function userNameChange(e) {
     e.preventDefault();
-    setUsername(e.target.value);
+    setUsername(e.target.value.toString());
   }
 
   function userPassChange(e) {
     e.preventDefault();
-    setPassword(e.target.value);
+    setPassword(e.target.value.toString());
   }
 
   function passCheckChange(e) {
@@ -107,10 +108,12 @@ function Registration({
     // if (!captchaValue) {
     //   addErrorMessage("Докажите что вы не робот.");
     // }
+  }, [passCheck, password, username, captchaValue]);
+  useEffect(() => {
     if (message.length === 0) {
       setCanRegister(true);
     }
-  }, [passCheck, password, username, captchaValue]);
+  }, [message]);
 
   return (
     <div className={styles.register}>
