@@ -6,46 +6,6 @@
   font-family: Arial, sans-serif; /* Шрифт */
 }
 
-.form-container {
-  flex: 0 0 200px;
-  padding: 20px; /* Отступы внутри формы */
-}
-.form-container input[type="text"],
-.form-container input[type="date"],
-.form-container textarea {
-  background-color: #fff;
-  color: #000; 
-}
-
-.form-container form {
-  display: flex;
-  flex-direction: column;
-  max-width: 300px; /* Максимальная ширина формы */
-  margin: 0 auto; /* Центрирование формы по горизонтали */
-}
-
-.form-container label {
-  margin-bottom: 5px;
-}
-
-.form-container input[type="text"],
-.form-container input[type="radio"] {
-  padding: 5px;
-  margin-bottom: 10px;
-}
-
-.form-container button {
-  background-color: #007BFF; /* Цвет кнопки */
-  color: #FFFFFF; /* Цвет текста на кнопке */
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-}
-
-.form-container button:hover {
-  background-color: #0056b3; /* Цвет кнопки при наведении */
-}
-
 .info-container {
   flex: 1; /* Расширяется на всю доступную ширину */
   padding: 20px; /* Отступы внутри контейнера с информацией */
@@ -87,76 +47,9 @@
   border: 2px solid gold;
   overflow-y: scroll;
 }
-
-.income {
-  flex: 1;
-  background-color: bisque;
-  color: green;
-  display: flex;
-  flex-direction: column;
-  /*justify-content: space-around; */
-}
-
-.expense {
-  flex: 1;
-  background-color: bisque;
-  color: red;
-  display: flex;
-  /*justify-content: space-around; */
-
-  flex-direction: column;
-}
-.transaction-details {
-  background-color: lightgray;
-  padding: 10px;
-  border: 1px solid gray;
-}
-.record-wrapper{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 10px;
-}
-.record-sum{
-  padding-left: 30px;
-}
-.delete-transaction{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-.delete-transaction__wrapper{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #15202B; 
-  width: 300px;
-  height: 150px;
-  border-radius: 4px;
-}
-.delete-transaction__controls{
-  margin-top: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
 @media (max-width: 768px) {
   .budget {
     flex-direction: column; /* Изменяем направление flex-контейнера на вертикальное */
-  }
-
-  .form-container {
-    flex: 1; /* Занимает все доступное пространство на маленьких экранах */
-    max-width: none; /* Убираем максимальную ширину формы */
   }
 
   .info-container {

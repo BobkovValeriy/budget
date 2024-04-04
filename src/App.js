@@ -1,8 +1,8 @@
 import './App.css';
 import LoginedApp from './loginedAppBudget/LoginedApp';
-import Login from './Login';
+import Login from './registrationAndLogin/Login';
 import { useState } from 'react';
-import Registration from './registration/Registration';
+import Registration from './registrationAndLogin/Registration.jsx';
 
 
 function App() {

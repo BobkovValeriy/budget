@@ -1,4 +1,4 @@
-import './App.css';
+import styles from "./Transaction.module.scss";
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin2Fill } from "react-icons/ri";
@@ -32,13 +32,18 @@ function Transaction({
   }
 
   return (
-    <li className={transaction.type === "Доход" ? "income" : "expense"}>
-      <div className="record-wrapper">
-        <button onClick={(e) => editRecord(e)} className="change-record">
+    <li
+      className={transaction.type === "Доход" ? styles.income : styles.expense}
+    >
+      <div className={styles.record__wrapper}>
+        <button
+          onClick={(e) => editRecord(e)}
+          className={styles.change__record}
+        >
           <FaEdit />
         </button>
         <span
-          className="record-sum"
+          className={styles.record__sum}
           onClick={(e) => {
             e.stopPropagation();
             transactionDetails(transaction);
@@ -47,14 +52,17 @@ function Transaction({
           {" "}
           Дата: {transaction.date}, Сумма: {transaction.amount}
         </span>
-        <button onClick={(e) => deleteRecord(e)} className="delete-record">
+        <button
+          onClick={(e) => deleteRecord(e)}
+          className={styles.delete__record}
+        >
           <RiDeleteBin2Fill />
         </button>
       </div>
       {showTransaction &&
         selectedTransaction &&
         selectedTransaction === transaction && (
-          <div className="transaction-details">
+          <div className={styles.transaction__details}>
             Расшифровка: {selectedTransaction.transactionType.join(", ")}
           </div>
         )}

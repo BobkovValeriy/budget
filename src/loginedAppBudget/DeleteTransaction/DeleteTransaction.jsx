@@ -1,9 +1,8 @@
-import "./App.css";
-import "./editTransaction.scss";
+import styles from "./DeleteTransaction.module.scss";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { FiDelete } from "react-icons/fi";
 import axios from "axios";
-import { downloadBudget } from "./engine";
+import { downloadBudget } from "../engine";
 
 function DeleteTransaction({
   setIsDeleting,
@@ -45,10 +44,10 @@ function DeleteTransaction({
   };
 
   return (
-    <div className="delete-transaction">
-      <div className="delete-transaction__wrapper">
+    <div className={styles.delete__transaction}>
+      <div className={styles.delete__transaction__wrapper}>
         <div>Вы желаете удалить запись?</div>
-        <div className="delete-transaction__controls">
+        <div className={styles.delete__transaction__controls}>
           <button onClick={(e) => deleteRecord(e)}>
             <RiDeleteBin2Fill />
           </button>

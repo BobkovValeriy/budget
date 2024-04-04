@@ -1,0 +1,33 @@
+.income {
+  flex: 1;
+  background-color: bisque;
+  color: green;
+  display: flex;
+  flex-direction: column;
+  /*justify-content: space-around; */
+}
+
+.expense {
+  flex: 1;
+  background-color: bisque;
+  color: red;
+  display: flex;
+  /*justify-content: space-around; */
+
+  flex-direction: column;
+}
+.transaction__details {
+  background-color: lightgray;
+  padding: 10px;
+  border: 1px solid gray;
+}
+.record__wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+}
+.record__sum{
+  padding-left: 30px;
+}

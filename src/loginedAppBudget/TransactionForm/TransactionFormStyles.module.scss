@@ -1,0 +1,68 @@
+.form__container {
+  flex: 0 0 300px;
+  background-color: #173451; // Цвет фона формы
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.form__container input[type="text"],
+.form__container input[type="date"],
+.form__container textarea {
+  background-color: #fff;
+  color: #000; 
+}
+
+.form__container form {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px; /* Максимальная ширина формы */
+  margin: 0 auto; /* Центрирование формы по горизонтали */
+}
+
+.form__container label {
+  margin-bottom: 5px;
+}
+
+.form__container input[type="text"],
+.form__container input[type="radio"] {
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.form__container button {
+  background-color: #007BFF; /* Цвет кнопки */
+  color: #FFFFFF; /* Цвет текста на кнопке */
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.form__container button:hover {
+  background-color: #0056b3; /* Цвет кнопки при наведении */
+}
+.incomes{
+    display: flex;
+    flex-direction: column;
+}
+.income{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.income__target{
+}
+.income__target input{
+    width: 150px;
+}
+.income__amount{
+}
+.income__amount input{
+    width: 80px;
+    height: 24px;
+}
+@media (max-width: 768px) {
+  .form__container {
+    flex: 1; /* Занимает все доступное пространство на маленьких экранах */
+    max-width: none; /* Убираем максимальную ширину формы */
+  }
+}

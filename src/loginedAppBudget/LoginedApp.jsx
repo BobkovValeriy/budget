@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import Transaction from "../Transaction";
-import TransactionForm from "../TransactionForm";
-import EditTransaction from "../editTransaction";
-import DeleteTransaction from "../DeleteTransaction";
-import { downloadBudget } from "../engine";
+import Transaction from "./Transaction/Transaction";
+import TransactionForm from "./TransactionForm/TransactionForm";
+import EditTransaction from "./EditTransaction/editTransaction";
+import DeleteTransaction from "./DeleteTransaction/DeleteTransaction";
+import { downloadBudget } from "./engine";
 
 function LoginedApp({ username, password }) {
   const now = new Date();
@@ -25,6 +25,9 @@ function LoginedApp({ username, password }) {
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
   const [remain, setRemain] = useState(0);
+  const [incomes, setIncomes] = useState([
+    { target: "", amount: parseFloat(0) },
+  ]);
 
   useEffect(() => {
     setRemain(totalIncome - totalExpense);
@@ -77,37 +80,33 @@ function LoginedApp({ username, password }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "transactionType") {
-      const transactionTypesArray = value.split(",");
-      let total = parseFloat(0);
-      transactionTypesArray.forEach((transaction) => {
-        const [typeName, typePrice] = transaction
-          .split(":")
-          .map((item) => item.trim());
-        total += parseFloat(typePrice);
-      });
-      setFormData({
-        ...formData,
-        [name]: transactionTypesArray,
-        amount: total,
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const arrayToSend = [];
+    let total = parseFloat(0);
+    incomes.map((income) => {
+      if (
+        income.target !== "" &&
+        !isNaN(income.amount) &&
+        typeof income.amount !== "undefined"
+      ) {
+        total += parseFloat(income.amount);
+        arrayToSend.push(income.target + ":" + income.amount);
+      }
+    });
 
     const newTransaction = {
       id: new Date(), // Генерируем номер для новой транзакции
       date: formData.date,
-      amount: formData.amount,
+      amount: total,
       type: formData.type,
-      transactionType: formData.transactionType,
+      transactionType: arrayToSend,
     };
 
     // Добавляем новую транзакцию на сервер
@@ -145,6 +144,7 @@ function LoginedApp({ username, password }) {
       type: "Расход",
       transactionType: [],
     });
+    setIncomes([{ target: "", amount: parseFloat(0) }]);
   };
 
   const compareDatesAsc = (a, b) => {
@@ -178,6 +178,8 @@ function LoginedApp({ username, password }) {
         handleChange={handleChange}
         formData={formData}
         buttonText="Добавить"
+        incomes={incomes}
+        setIncomes={setIncomes}
       />
       <div className="info-container">
         <div className="transactions">
@@ -227,6 +229,8 @@ function LoginedApp({ username, password }) {
           setBudget={setBudget}
           username={username}
           password={password}
+          incomes={incomes}
+          setIncomes={setIncomes}
         />
       )}
       {isDeleting && (

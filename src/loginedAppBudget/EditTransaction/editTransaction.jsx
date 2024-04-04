@@ -1,9 +1,9 @@
-import "./App.css";
+import "../../App.css";
 import "./editTransaction.scss";
 import { useState } from "react";
-import TransactionForm from "./TransactionForm";
+import TransactionForm from "../TransactionForm/TransactionForm";
 import axios from "axios";
-import { downloadBudget } from "./engine";
+import { downloadBudget } from "../engine";
 
 function EditTransaction({
   transactionData,
@@ -13,6 +13,8 @@ function EditTransaction({
   setBudget,
   username,
   password,
+  incomes,
+  setIncomes,
 }) {
   let { amount, date, transactionType, type, id } = transactionData;
   const [dataFormForChange, setDataFormForChange] = useState({
@@ -52,6 +54,18 @@ function EditTransaction({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const arrayToSend = [];
+    let total = parseFloat(0);
+    incomes.map((income) => {
+      if (
+        income.target !== "" &&
+        !isNaN(income.amount) &&
+        typeof income.amount !== "undefined"
+      ) {
+        total += parseFloat(income.amount);
+        arrayToSend.push(income.target + ":" + income.amount);
+      }
+    });
 
     try {
       // Отправка данных на обновление записи
@@ -63,9 +77,9 @@ function EditTransaction({
           transaction: {
             id: id,
             date: dataFormForChange.date,
-            amount: parseFloat(dataFormForChange.amount),
+            amount: total,
             type: dataFormForChange.type,
-            transactionType: dataFormForChange.transactionType,
+            transactionType: arrayToSend,
           },
         }
       );
@@ -89,6 +103,8 @@ function EditTransaction({
         handleChange={changeTransactionData}
         formData={dataFormForChange}
         buttonText="обновить"
+        incomes={incomes}
+        setIncomes={setIncomes}
         exitButton={
           <div className="exit-button__wrapper">
             <button
