@@ -17,14 +17,11 @@ function Login({
   }
   async function checkLogin(username, password, setLogined, setShowLoginMenu) {
     try {
-      console.log(username, password);
       const apiEndpoint = `https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/checklogin?username=${encodeURIComponent(
         username
       )}&password=${encodeURIComponent(password)}`;
 
       const response = await axios.get(apiEndpoint);
-
-      console.log(response); // Выводим ответ сервера в консоль
 
       // Проверяем, успешен ли запрос и код в ответе равен "logined"
       if (response.data.login === "logined") {

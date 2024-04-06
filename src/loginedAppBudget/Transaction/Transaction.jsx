@@ -5,8 +5,6 @@ import { RiDeleteBin2Fill } from "react-icons/ri";
 
 function Transaction({
   transaction,
-  setTransactionTypesArray,
-  editRecord,
   setIsEditing,
   setEditTransaction,
   isEditing,
@@ -17,7 +15,6 @@ function Transaction({
 
   function transactionDetails(transaction) {
     setSelectedTransaction(transaction);
-    setTransactionTypesArray(transaction.transactionType);
     setShowTransaction(!showTransaction);
   }
   function editRecord(e) {

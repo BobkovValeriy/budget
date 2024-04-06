@@ -1,4 +1,3 @@
-import './App.css';
 import LoginedApp from './loginedAppBudget/LoginedApp';
 import Login from './registrationAndLogin/Login';
 import { useState } from 'react';

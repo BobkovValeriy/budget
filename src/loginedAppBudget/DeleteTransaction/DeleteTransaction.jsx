@@ -1,42 +1,17 @@
 import styles from "./DeleteTransaction.module.scss";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { FiDelete } from "react-icons/fi";
-import axios from "axios";
-import { downloadBudget } from "../engine";
+import { deleteRecord } from "../engine";
 
 function DeleteTransaction({
   setIsDeleting,
   transactionData,
-  setReceivedData,
+  budget,
   setBudget,
   username,
   password,
 }) {
-  let { id } = transactionData; // Используем поле id для идентификации записи
-  const apiEndpoint =
-    "https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/";
-
-  const deleteRecord = async (e) => {
-    e.preventDefault();
-    try {
-      // Отправка данных на удаление записи
-      const deleteResponse = await axios.post(
-        `${apiEndpoint}deletebudgetrecord`,
-        { id: id, username: username, password: password },
-        { headers: { "Content-Type": "application/json" } }
-      );
-
-      console.log("Запись успешно удалена!", deleteResponse.data);
-
-      // Получение бюджета после успешного удаления
-      downloadBudget(username, password, setBudget, setReceivedData);
-    } catch (error) {
-      // Обработка ошибок
-      console.error("Ошибка при удалении записи:", error);
-      // Дополнительные действия, например, уведомление пользователя об ошибке
-    }
-    setIsDeleting(false);
-  };
+  let { id } = transactionData;
 
   const cancelDeleteRecord = (e) => {
     e.preventDefault();
@@ -48,7 +23,19 @@ function DeleteTransaction({
       <div className={styles.delete__transaction__wrapper}>
         <div>Вы желаете удалить запись?</div>
         <div className={styles.delete__transaction__controls}>
-          <button onClick={(e) => deleteRecord(e)}>
+          <button
+            onClick={(e) =>
+              deleteRecord(
+                (e) => e,
+                id,
+                username,
+                password,
+                setBudget,
+                budget,
+                setIsDeleting
+              )
+            }
+          >
             <RiDeleteBin2Fill />
           </button>
           <button onClick={(e) => cancelDeleteRecord(e)}>

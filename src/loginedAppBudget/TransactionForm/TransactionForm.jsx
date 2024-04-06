@@ -2,13 +2,17 @@ import { useState, useEffect } from "react";
 import styles from "./TransactionFormStyles.module.scss";
 
 function TransactionForm({
-  handleSubmit,
   handleChange,
+  handleSubmit,
   formData = {},
+  username,
+  password,
+  setBudget,
+  budget,
+  setFormData,
+  formattedDate,
   buttonText,
   exitButton = null,
-  incomes,
-  setIncomes,
 }) {
   const { date = "", type = "Доход", transactionType = [] } = formData;
   useEffect(() => {
@@ -22,6 +26,9 @@ function TransactionForm({
       setIncomes(incomeObjects);
     }
   }, []);
+  const [incomes, setIncomes] = useState([
+    { target: "", amount: parseFloat(0) },
+  ]);
   const handleIncomesChange = (e, index) => {
     const { name, value } = e.target;
     const updatedIncomes = [...incomes];
@@ -35,14 +42,26 @@ function TransactionForm({
       setIncomes([...updatedIncomes, { target: "", amount: "" }]);
     }
   };
-  useEffect(() => {
-    console.log(incomes);
-  }, [incomes]);
 
   return (
     <div className={styles.form__container}>
       {exitButton}
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <form
+        onSubmit={(e) =>
+          handleSubmit(
+            e,
+            incomes,
+            setIncomes,
+            formData,
+            username,
+            password,
+            setBudget,
+            budget,
+            setFormData,
+            formattedDate
+          )
+        }
+      >
         <div>
           <label htmlFor="date">Дата:</label>
           <input

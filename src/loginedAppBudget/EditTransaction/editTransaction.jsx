@@ -1,20 +1,20 @@
-import "../../App.css";
 import "./editTransaction.scss";
 import { useState } from "react";
 import TransactionForm from "../TransactionForm/TransactionForm";
 import axios from "axios";
-import { downloadBudget } from "../engine";
+import { downloadBudget, sortBudget, apiEndpoint } from "../engine";
 
 function EditTransaction({
   transactionData,
   setReceivedData,
   isEditing,
   setIsEditing,
+  budget,
   setBudget,
   username,
   password,
-  incomes,
-  setIncomes,
+  setFormData,
+  formattedDate,
 }) {
   let { amount, date, transactionType, type, id } = transactionData;
   const [dataFormForChange, setDataFormForChange] = useState({
@@ -46,13 +46,11 @@ function EditTransaction({
       });
     }
   };
-  const apiEndpoint =
-    "https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/";
   const closeEditing = () => {
     setIsEditing(false);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, incomes) => {
     e.preventDefault();
     const arrayToSend = [];
     let total = parseFloat(0);
@@ -83,17 +81,14 @@ function EditTransaction({
           },
         }
       );
-
-      console.log("Запись успешно обновлена!", updateResponse.data);
-
-      // Получение бюджета после успешного обновления
       downloadBudget(username, password, setBudget, setReceivedData);
+      sortBudget(false, budget, setBudget);
+      console.log("Запись успешно обновлена!", updateResponse.data);
     } catch (error) {
       // Обработка ошибок
       console.error("Ошибка при обновлении записи:", error);
       // Дополнительные действия, например, уведомление пользователя об ошибке
     }
-
     setIsEditing(!isEditing);
   };
   return (
@@ -102,9 +97,13 @@ function EditTransaction({
         handleSubmit={handleSubmit}
         handleChange={changeTransactionData}
         formData={dataFormForChange}
+        username={username}
+        password={password}
+        setBudget={setBudget}
+        budget={budget}
+        setFormData={setFormData}
+        formattedDate={formattedDate}
         buttonText="обновить"
-        incomes={incomes}
-        setIncomes={setIncomes}
         exitButton={
           <div className="exit-button__wrapper">
             <button

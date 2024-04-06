@@ -1,23 +1,22 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
+import styles from "../App.module.scss";
 import Transaction from "./Transaction/Transaction";
 import TransactionForm from "./TransactionForm/TransactionForm";
 import EditTransaction from "./EditTransaction/editTransaction";
 import DeleteTransaction from "./DeleteTransaction/DeleteTransaction";
-import { downloadBudget } from "./engine";
+import { addRecord, downloadBudget, sortBudget } from "./engine";
+import LoadingBars from "../preloading/LoadingBars";
 
 function LoginedApp({ username, password }) {
   const now = new Date();
   const formattedDate = now.toISOString().split("T")[0];
   const [budget, setBudget] = useState([]);
-  const [receivedData, setReceivedData] = useState(false);
   const [formData, setFormData] = useState({
     date: formattedDate,
     amount: 0,
     type: "Расход",
     transactionType: [],
   });
-  const [transactionTypesArray, setTransactionTypesArray] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [editTransaction, setEditTransaction] = useState();
@@ -25,9 +24,6 @@ function LoginedApp({ username, password }) {
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
   const [remain, setRemain] = useState(0);
-  const [incomes, setIncomes] = useState([
-    { target: "", amount: parseFloat(0) },
-  ]);
 
   useEffect(() => {
     setRemain(totalIncome - totalExpense);
@@ -75,7 +71,8 @@ function LoginedApp({ username, password }) {
   }, [budget]);
 
   useEffect(() => {
-    downloadBudget(username, password, setBudget, setReceivedData);
+    downloadBudget(username, password, setBudget);
+    sortBudget(false, budget, setBudget);
   }, []);
 
   const handleChange = (e) => {
@@ -86,158 +83,97 @@ function LoginedApp({ username, password }) {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const arrayToSend = [];
-    let total = parseFloat(0);
-    incomes.map((income) => {
-      if (
-        income.target !== "" &&
-        !isNaN(income.amount) &&
-        typeof income.amount !== "undefined"
-      ) {
-        total += parseFloat(income.amount);
-        arrayToSend.push(income.target + ":" + income.amount);
-      }
-    });
-
-    const newTransaction = {
-      id: new Date(), // Генерируем номер для новой транзакции
-      date: formData.date,
-      amount: total,
-      type: formData.type,
-      transactionType: arrayToSend,
-    };
-
-    // Добавляем новую транзакцию на сервер
-    axios
-      .post(
-        "https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/addrecord",
-        {
-          userName: username,
-          password: password,
-          transaction: newTransaction,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        if (response.data.status === "success") {
-          console.log(response.data.message);
-          // Обновляем состояние бюджета после успешного добавления транзакции
-          setBudget([...budget, newTransaction]);
-        } else {
-          console.error(response.data.message);
-        }
-      })
-      .catch((error) => {
-        console.error("Ошибка при добавлении транзакции:", error);
-      });
-
-    // Очищаем поля формы после добавления транзакции
-    setFormData({
-      date: formattedDate,
-      amount: "",
-      type: "Расход",
-      transactionType: [],
-    });
-    setIncomes([{ target: "", amount: parseFloat(0) }]);
-  };
-
-  const compareDatesAsc = (a, b) => {
-    const dateA = new Date(a.date).getTime();
-    const dateB = new Date(b.date).getTime();
-    return dateA - dateB;
-  };
-
-  const compareDatesDesc = (a, b) => {
-    const dateA = new Date(a.date).getTime();
-    const dateB = new Date(b.date).getTime();
-    return dateB - dateA;
-  };
-
-  const sortBudget = (ascending) => {
-    const sortedBudget = [...budget];
-    sortedBudget.sort(ascending ? compareDatesAsc : compareDatesDesc);
-    setBudget(sortedBudget);
-  };
-
-  useEffect(() => {
-    if (receivedData) {
-      sortBudget(false);
-    }
-  }, [receivedData]);
-
   return (
-    <div className="budget">
+    <div className={styles.budget}>
       <TransactionForm
-        handleSubmit={handleSubmit}
         handleChange={handleChange}
+        handleSubmit={addRecord}
         formData={formData}
+        username={username}
+        password={password}
+        setBudget={setBudget}
+        budget={budget}
+        setFormData={setFormData}
+        formattedDate={formattedDate}
         buttonText="Добавить"
-        incomes={incomes}
-        setIncomes={setIncomes}
       />
-      <div className="info-container">
-        <div className="transactions">
-          <h2>Список транзакций:</h2>
-          <div className="transaction-controls">
-            <button onClick={() => sortBudget(true)}>Сначала старые</button>
-            <button onClick={() => sortBudget(false)}>Сначала новые</button>
+      {budget.length === 0 ? (
+        <LoadingBars />
+      ) : (
+        <div className={styles.info__container}>
+          <div className={styles.transactions}>
+            <>
+              <h2>Список транзакций:</h2>
+              <div className={styles.transaction__controls}>
+                <button onClick={() => sortBudget(true, budget, setBudget)}>
+                  Сначала старые
+                </button>
+                <button onClick={() => sortBudget(false, budget, setBudget)}>
+                  Сначала новые
+                </button>
+              </div>
+              <ul className={styles.transactions__records}>
+                {budget.map((transaction, index) => (
+                  <Transaction
+                    key={index}
+                    transaction={transaction}
+                    setFormData={setFormData}
+                    handleChange={handleChange}
+                    setIsEditing={setIsEditing}
+                    setEditTransaction={setEditTransaction}
+                    isEditing={isEditing}
+                    setIsDeleting={setIsDeleting}
+                  />
+                ))}
+              </ul>
+            </>
           </div>
-          <ul className="transactions-records">
-            {budget.map((transaction, index) => (
-              <Transaction
-                key={index}
-                transaction={transaction}
-                setTransactionTypesArray={setTransactionTypesArray}
-                setFormData={setFormData}
-                handleChange={handleChange}
-                setIsEditing={setIsEditing}
-                setEditTransaction={setEditTransaction}
-                isEditing={isEditing}
-                setIsDeleting={setIsDeleting}
-              />
-            ))}
-          </ul>
+
+          <div className={styles.summary}>
+            <div>
+              Всего доход:
+              <span className={styles.income}>{totalIncome}</span>
+            </div>
+            <div>
+              Всего расход:
+              <span className={styles.expense}>{totalExpense}</span>
+            </div>
+            <div>
+              Остаток: <span className={styles.remain}>{remain}</span>
+            </div>
+            <div>Общие затраты по типам:</div>
+            <ul>
+              {Object.entries(totalExpensesByType)
+                .sort(([, totalA], [, totalB]) => totalB - totalA)
+                .map(([type, total]) => (
+                  <li key={type}>
+                    {type}: {total}
+                  </li>
+                ))}
+            </ul>
+          </div>
         </div>
-        <div className="summary">
-          <div>Всего доход: {totalIncome}</div>
-          <div>Всего расход: {totalExpense}</div>
-          <div>Остаток: {remain} </div>
-          <div>Общие затраты по типам:</div>
-          <ul>
-            {Object.entries(totalExpensesByType)
-              .sort(([, totalA], [, totalB]) => totalB - totalA) // Сортировка по убыванию total
-              .map(([type, total]) => (
-                <li key={type}>
-                  {type}: {total}
-                </li>
-              ))}
-          </ul>
-        </div>
-      </div>
+      )}
+
       {isEditing && (
         <EditTransaction
           transactionData={editTransaction}
-          isEditing={isEditing}
-          setIsEditing={setIsEditing}
-          setReceivedData={setReceivedData}
-          setBudget={setBudget}
+          formData={formData}
           username={username}
           password={password}
-          incomes={incomes}
-          setIncomes={setIncomes}
+          setBudget={setBudget}
+          budget={budget}
+          setFormData={setFormData}
+          formattedDate={formattedDate}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
         />
       )}
       {isDeleting && (
         <DeleteTransaction
           setIsDeleting={setIsDeleting}
           transactionData={editTransaction}
-          setReceivedData={setReceivedData}
+          budget={budget}
           setBudget={setBudget}
           username={username}
           password={password}
