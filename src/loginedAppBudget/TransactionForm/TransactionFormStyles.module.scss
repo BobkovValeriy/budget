@@ -50,16 +50,18 @@
     justify-content: space-between;
 }
 .income__target{
+  background-color: #fff;
+  color: #000; 
+  width: 150px;
 }
-.income__target input{
-    width: 150px;
-}
+
 .income__amount{
+  width: 80px;
+  height: 24px;
+  background-color: #fff;
+  color: #000; 
 }
-.income__amount input{
-    width: 80px;
-    height: 24px;
-}
+
 @media (max-width: 768px) {
   .form__container {
     flex: 1; /* Занимает все доступное пространство на маленьких экранах */

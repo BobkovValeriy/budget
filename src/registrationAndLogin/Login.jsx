@@ -79,6 +79,7 @@ function Login({
             id="username"
             name="username"
             onChange={userNameChange}
+            className={styles.input_field}
           />
 
           <label htmlFor="password">Пароль:</label>
@@ -87,6 +88,7 @@ function Login({
             id="password"
             name="password"
             onChange={userPassChange}
+            className={styles.input_field}
           />
 
           <button type="submit">Войти</button>

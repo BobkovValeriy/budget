@@ -75,50 +75,46 @@ function TransactionForm({
         </div>
         <div>
           <label>Тип:</label>
-          <label>
-            <input
-              type="radio"
-              name="type"
-              value="Расход"
-              checked={type === "Расход"}
-              onChange={handleChange}
-            />
-            Расход
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="type"
-              value="Доход"
-              checked={type === "Доход"}
-              onChange={handleChange}
-            />
-            Доход
-          </label>
+          <input
+            type="radio"
+            name="type"
+            value="Расход"
+            id="expense"
+            checked={type === "Расход"}
+            onChange={handleChange}
+          />
+          <label htmlFor="expense">Расход</label>
+          <input
+            type="radio"
+            name="type"
+            value="Доход"
+            id="income"
+            checked={type === "Доход"}
+            onChange={handleChange}
+          />
+          <label htmlFor="income">Доход</label>
         </div>
         <div className={styles.incomes}>
           {incomes.map((detail, index) => (
             <div key={index} className={styles.income}>
-              <div className={styles.income__target}>
-                <input
-                  type="text"
-                  id={`target-${index}`}
-                  name="target"
-                  value={detail.target}
-                  placeholder="Цель траты"
-                  onChange={(e) => handleIncomesChange(e, index)}
-                />
-              </div>
-              <div className={styles.income__amount}>
-                <input
-                  type="number"
-                  id={`amount-${index}`}
-                  name="amount"
-                  value={detail.amount}
-                  placeholder="Сумма"
-                  onChange={(e) => handleIncomesChange(e, index)}
-                />
-              </div>
+              <input
+                type="text"
+                id={`target-${index}`}
+                name="target"
+                value={detail.target}
+                placeholder="Цель траты"
+                onChange={(e) => handleIncomesChange(e, index)}
+                className={styles.income__target}
+              />
+              <input
+                type="number"
+                id={`amount-${index}`}
+                name="amount"
+                value={detail.amount}
+                placeholder="Сумма"
+                onChange={(e) => handleIncomesChange(e, index)}
+                className={styles.income__amount}
+              />
             </div>
           ))}
         </div>

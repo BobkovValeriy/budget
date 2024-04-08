@@ -8,9 +8,6 @@
   color: #FFFFFF;
   /* background: rgba(0, 0, 0, 0.5); */
   }
-.login_form input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0px 1000px #fff inset;
-}
 .login_container {
   display: flex;
   flex-direction: column;
@@ -32,7 +29,7 @@
   margin-bottom: 5px;
 }
 
-.login_form input {
+.input_field {
   padding: 5px;
   margin-bottom: 10px;
   background-color: #fff;

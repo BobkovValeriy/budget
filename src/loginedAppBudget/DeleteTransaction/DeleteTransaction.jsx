@@ -26,7 +26,7 @@ function DeleteTransaction({
           <button
             onClick={(e) =>
               deleteRecord(
-                (e) => e,
+                e,
                 id,
                 username,
                 password,
