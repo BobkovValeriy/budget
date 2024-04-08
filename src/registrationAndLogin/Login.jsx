@@ -1,4 +1,4 @@
-import "./Login.css";
+import styles from "./Login.module.scss";
 import axios from "axios";
 import { useState } from "react";
 
@@ -63,16 +63,16 @@ function Login({
   }
 
   return (
-    <div className="login">
-      <div className="login-container">
+    <div className={styles.login}>
+      <div className={styles.login_container}>
         <button
           type="button"
           onClick={showRegistrationMenu}
-          className="login__nav-button"
+          className={styles.login__nav_button}
         >
           Регистрация
         </button>
-        <form className="login-form" onSubmit={verification}>
+        <form className={styles.login_form} onSubmit={verification}>
           <label htmlFor="username">Имя пользователя:</label>
           <input
             type="text"
@@ -91,7 +91,7 @@ function Login({
 
           <button type="submit">Войти</button>
         </form>
-        <div className="error-message">
+        <div className={styles.error_message}>
           {message.map((mess, index) => {
             return <div key={index}>{mess}</div>;
           })}
