@@ -1,14 +1,20 @@
+.app__wrapper{
+  background-color: #15202B;
+}
 .budget {
   display: flex;
-  background-color: #15202B; /* Тёмно-синий цвет фона */
-  color: #FFFFFF; /* Белый цвет текста */
-  height: 100vh; /* Высота на весь экран */
-  font-family: Arial, sans-serif; /* Шрифт */
+  background-color: #15202B; 
+  color: #FFFFFF; 
+  height: 100vh; 
+  font-family: Arial, sans-serif;
 }
-
+.form_bar{
+  flex: 0 0 350px;
+  margin: 20px;
+}
 .info__container {
   flex: 1; /* Расширяется на всю доступную ширину */
-  padding: 20px; /* Отступы внутри контейнера с информацией */
+  padding: 20px;
   background-color: #007BFF;
   display: flex;
   flex-direction: row;
@@ -23,71 +29,40 @@
   overflow-y: scroll;
   position: relative;
 }
-.transaction__controls {
-  background-color: #15202B; 
-  color: #FFFFFF; 
-  position: sticky;
-  top: 0; 
-  z-index: 1; 
-  padding: 10px;
-  button:last-child {
-    margin: 10px
-  }
-}
 .transactions li {
   flex: 1;
   background-color: bisque;
-  margin-bottom: 5px; /* Добавляем отступ между строками */
-  list-style-type: none; /* Убираем маркеры (точки) */
-  padding: 5px; /* Добавляем отступ внутри элемента списка */
-  border-bottom: 1px solid darkgoldenrod; /* Добавляем нижний бордюр */
+  margin-bottom: 5px; 
+  list-style-type: none; 
+  padding: 5px; 
+  border-bottom: 1px solid darkgoldenrod; 
   margin-right: 10px;
 }
-
-.summary {
-  flex: 1;
-  border: 2px solid gold;
-  overflow-y: scroll;
-  padding-left: 5px;
-}
-.summary div{
-  padding-top: 10px;
-}
-.summary div span{
-    margin-left: 15px;
-    padding-right: 10px;
-    background-color: bisque;
-}
-.income{
-  color: green;
-}
-.expense{
-  color: red;
-}
-.remain{
-  color: black;
-}
-.summary ul li {
-  margin-top: 5px;
-  list-style-type: none;
-}
-@media (max-width: 768px) {
+@media (max-width: 1010px) {
+  .app__wrapper{
+    overflow-y: hidden;
+    background-color: #15202B;
+  }
   .budget {
-    flex-direction: column; /* Изменяем направление flex-контейнера на вертикальное */
+    flex-direction: column;
+    height: 90vh;
+  }
+  .budget:empty{
+    background-color: #15202B;
+    display:none;
   }
 
   .info__container {
     flex-direction: column; /* Изменяем направление flex-контейнера на вертикальное */
   }
-
+  .form_bar:empty {
+    display: none; /* Оставляем скрытым, если у элемента нет содержимого */
+  }
   .transactions{
     flex: none;
     order:2
   }
-  .summary {
-    order:1;
-    flex: none; /* Отменяем расширение на всю ширину для transactions и summary */
-  }
+
   .transactions{
   border-top: none;
   border-left: 2px solid gold;

@@ -15,7 +15,9 @@ export const downloadBudget = function (username, password, setBudget) {
             )
             .then((response) => {
                 if (response.data.status === "success") {
-                    setBudget(response.data.transactions);
+                    const sortedBudget = [...response.data.transactions]
+                    sortedBudget.sort(compareDatesDesc)
+                    setBudget(sortedBudget);
                 } else {
                     console.error(response.data.message);
                 }
@@ -39,7 +41,6 @@ export const deleteRecord = async (e, id, username, password, setBudget, budget,
 
         // Получение бюджета после успешного удаления
         downloadBudget(username, password, setBudget);
-        sortBudget(false, budget, setBudget);
     } catch (error) {
         // Обработка ошибок
         console.error("Ошибка при удалении записи:", error);
@@ -96,8 +97,11 @@ export const addRecord = (e, incomes,
         .then((response) => {
             if (response.data.status === "success") {
                 console.log(response.data.message);
-                // Обновляем состояние бюджета после успешного добавления транзакции
-                setBudget([...budget, newTransaction]);
+                setBudget(prevBudget => {
+                    const newBudget = [...prevBudget, newTransaction];
+                    sortBudget(false, newBudget, setBudget);
+                    return newBudget;
+                });
             } else {
                 console.error(response.data.message);
             }
@@ -116,7 +120,40 @@ export const addRecord = (e, incomes,
     setIncomes([{ target: "", amount: parseFloat(0) }]);
     sortBudget(false, budget, setBudget);
 };
+export function compileIncome(budget) {
+    return budget.reduce((total, transaction) => {
+        return transaction.type === "Доход"
+            ? total + Number(transaction.amount)
+            : total;
+    }, 0);
+}
 
+export function compileTotalExpense(budget) {
+    return budget.reduce((total, transaction) => {
+        return transaction.type === "Расход"
+            ? total + Number(transaction.amount)
+            : total;
+    }, 0);
+}
+export function recompileBudget(budget, setTotalIncome, setTotalExpense, setTotalExpenseByType) {
+    const newTotalExpensesByType = {};
+
+    budget.forEach((transaction) => {
+        if (transaction.type === "Расход") {
+            transaction.transactionType.forEach((type) => {
+                const [typeName, typePrice] = type
+                    .split(":")
+                    .map((item) => item.trim());
+                newTotalExpensesByType[typeName] =
+                    (newTotalExpensesByType[typeName] || 0) + Number(typePrice);
+            });
+        }
+    });
+
+    setTotalIncome(compileIncome(budget));
+    setTotalExpense(compileTotalExpense(budget));
+    setTotalExpenseByType(newTotalExpensesByType);
+}
 export const compareDatesAsc = (a, b) => {
     const dateA = new Date(a.date).getTime();
     const dateB = new Date(b.date).getTime();
@@ -131,6 +168,7 @@ export const compareDatesDesc = (a, b) => {
 
 export const sortBudget = (ascending, budget, setBudget) => {
     const sortedBudget = [...budget];
+    console.log("sorting:", ascending, budget, setBudget)
     sortedBudget.sort(ascending ? compareDatesAsc : compareDatesDesc);
     setBudget(sortedBudget);
 };

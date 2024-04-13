@@ -1,5 +1,4 @@
 .form__container {
-  flex: 0 0 300px;
   background-color: #173451; // Цвет фона формы
   padding: 20px;
   border-radius: 8px;
@@ -43,7 +42,17 @@
 .incomes{
     display: flex;
     flex-direction: column;
+    padding-top: 10px;
+    max-height: 55vh;
+    overflow-y: auto;
 }
+ @media (max-width: 1010px) {
+  .incomes{
+    margin-top: 0px;
+    max-height: 70vh;
+    height: 70vh;
+  }
+ }
 .income{
     display: flex;
     flex-direction: row;
@@ -62,7 +71,7 @@
   color: #000; 
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1010px) {
   .form__container {
     flex: 1; /* Занимает все доступное пространство на маленьких экранах */
     max-width: none; /* Убираем максимальную ширину формы */

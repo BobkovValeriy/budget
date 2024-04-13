@@ -1,0 +1,11 @@
+.transaction__controls {
+  background-color: #15202B; 
+  color: #FFFFFF; 
+  position: sticky;
+  top: 0; 
+  z-index: 1; 
+  padding: 10px;
+  button:last-child {
+    margin: 10px
+  }
+}

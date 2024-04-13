@@ -1,0 +1,49 @@
+.calculator {
+  margin-top: 10px;
+  height: 23vh;
+  flex: 0 0 300px;
+  padding: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+// @media (max-width: 768px) {
+//   .calculator {display: none;}
+// }
+
+input[type='number'] {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+.operations{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+.operations button {
+  margin-right: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.result {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.memory {
+  margin-top: 20px;
+  overflow: auto;
+  max-height: 100px;
+}
+
+.memory ul {
+  list-style: none;
+  padding: 0;
+}
+
+.memory li {
+  margin-bottom: 5px;
+}

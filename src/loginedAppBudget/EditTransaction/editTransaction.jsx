@@ -92,7 +92,7 @@ function EditTransaction({
     setIsEditing(!isEditing);
   };
   return (
-    <div className="editing-transaction">
+    <div className="editing-transaction" onClick={closeEditing}>
       <TransactionForm
         handleSubmit={handleSubmit}
         handleChange={changeTransactionData}

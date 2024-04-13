@@ -1,0 +1,71 @@
+.MobileNavBarWrapper{
+    display: none;
+    background-color: #173451;
+}
+.MobileNavBarWrapper_button{
+  background-color: #007BFF; /* Цвет кнопки */
+  color: #FFFFFF; /* Цвет текста на кнопке */
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 15px;
+  font-size: 24px;
+  height: 50px;
+  width: 300px;
+  cursor: pointer;
+}
+@media (max-width: 1010px) {
+.MobileNavBarWrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1200;
+    height: 10vh;
+    width: 100%;
+    transition-duration: 0.5s;
+}
+.MobileNavBarWrapper__active{
+    background-color: #173451;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    align-items: center;
+    z-index: 1200;
+    width: 100%;
+    transition-duration: 0.5s;
+}
+.MobileNavBarWrapper_button{
+
+}
+.MobileNavBarWrapper_show{
+    width: 300px;
+    height: 40px;
+    background-color: #FFFFFF;
+    border:  4px solid #007BFF;
+    cursor: pointer;
+    color: black;
+}
+.MobileNavBarWrapper_show:hover {
+    background-color: #007BFF;
+    border: 4px solid  #FFFFFF;
+    color: white;
+    transition-duration: 0.2s;
+}
+.MobileNavBarWrapper_hide{
+    transform: rotate(180deg);
+    width: 300px;
+    height: 40px;
+    background-color: #FFFFFF;
+    border: 4px solid #007BFF;
+    cursor: pointer;
+    color: black;
+}
+.MobileNavBarWrapper_hide:hover{
+    background-color: #007BFF;
+    border: 4px solid  #FFFFFF;
+    color: white;
+    transition-duration: 0.2s;
+}
+}

@@ -1,0 +1,33 @@
+.summary {
+  flex: 1;
+  border: 2px solid gold;
+  overflow-y: scroll;
+  padding-left: 5px;
+}
+.summary div{
+  padding-top: 10px;
+}
+.summary div span{
+    margin-left: 15px;
+    padding-right: 10px;
+    background-color: bisque;
+}
+.income{
+  color: green;
+}
+.expense{
+  color: red;
+}
+.remain{
+  color: black;
+}
+.summary ul li {
+  margin-top: 5px;
+  list-style-type: none;
+}
+@media (max-width: 1010px) {
+.summary {
+    order:1;
+    flex: none; /* Отменяем расширение на всю ширину для transactions и summary */
+  }
+}
