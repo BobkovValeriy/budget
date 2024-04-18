@@ -1,4 +1,4 @@
-import "./editTransaction.scss";
+import styles from "./editTransaction.module.scss";
 import { useState } from "react";
 import TransactionForm from "../TransactionForm/TransactionForm";
 import axios from "axios";
@@ -92,30 +92,35 @@ function EditTransaction({
     setIsEditing(!isEditing);
   };
   return (
-    <div className="editing-transaction" onClick={closeEditing}>
-      <TransactionForm
-        handleSubmit={handleSubmit}
-        handleChange={changeTransactionData}
-        formData={dataFormForChange}
-        username={username}
-        password={password}
-        setBudget={setBudget}
-        budget={budget}
-        setFormData={setFormData}
-        formattedDate={formattedDate}
-        buttonText="обновить"
-        exitButton={
-          <div className="exit-button__wrapper">
-            <button
-              className="exit-button"
-              type="button"
-              onClick={closeEditing}
-            >
-              отмена
-            </button>
-          </div>
-        }
-      />
+    <div className={styles.editing__transaction} onClick={closeEditing}>
+      <div
+        className={styles.edititng__wrapper}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <TransactionForm
+          handleSubmit={handleSubmit}
+          handleChange={changeTransactionData}
+          formData={dataFormForChange}
+          username={username}
+          password={password}
+          setBudget={setBudget}
+          budget={budget}
+          setFormData={setFormData}
+          formattedDate={formattedDate}
+          buttonText="обновить"
+          exitButton={
+            <div className={styles.exit__button__wrapper}>
+              <button
+                className={styles.exit__button}
+                type="button"
+                onClick={closeEditing}
+              >
+                отмена
+              </button>
+            </div>
+          }
+        />
+      </div>
     </div>
   );
 }

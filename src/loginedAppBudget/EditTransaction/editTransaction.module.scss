@@ -1,4 +1,4 @@
-.editing-transaction {
+.editing__transaction {
   position: fixed;
   top: 0;
   left: 0;
@@ -8,7 +8,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 900;
+  .edititng__wrapper{
+  justify-content: center;
+  align-items: center;
   z-index: 1000;
+  }
 
   form {
   }
@@ -32,12 +37,12 @@
     color: #fff;
     cursor: pointer;
   }
-  .exit-button__wrapper{
+  .exit__button__wrapper{
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  .exit-button{
+  .exit__button{
     width: 300px;
   }
 }
