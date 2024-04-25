@@ -1,12 +1,12 @@
 import axios from "axios";
 export const apiEndpoint =
     "https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/";
-export const downloadBudget = function (username, password, setBudget) {
+export const downloadBudget = function (username, password, setBudget, nowDay) {
     setTimeout(() => {
         axios
             .post(
                 "https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/getbudget",
-                { userName: username, password: password },
+                { userName: username, password: password, nowDay: nowDay },
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -15,7 +15,10 @@ export const downloadBudget = function (username, password, setBudget) {
             )
             .then((response) => {
                 if (response.data.status === "success") {
-                    const sortedBudget = [...response.data.transactions]
+                    const sortedBudget = [...response.data.resultArray]
+                    //changing logic
+
+
                     sortedBudget.sort(compareDatesDesc)
                     setBudget(sortedBudget);
                 } else {
@@ -96,7 +99,6 @@ export const addRecord = (e, incomes,
     )
         .then((response) => {
             if (response.data.status === "success") {
-                console.log(response.data.message);
                 setBudget(prevBudget => {
                     const newBudget = [...prevBudget, newTransaction];
                     sortBudget(false, newBudget, setBudget);
@@ -168,7 +170,6 @@ export const compareDatesDesc = (a, b) => {
 
 export const sortBudget = (ascending, budget, setBudget) => {
     const sortedBudget = [...budget];
-    console.log("sorting:", ascending, budget, setBudget)
     sortedBudget.sort(ascending ? compareDatesAsc : compareDatesDesc);
     setBudget(sortedBudget);
 };

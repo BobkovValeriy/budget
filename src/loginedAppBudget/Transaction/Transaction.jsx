@@ -2,8 +2,12 @@ import styles from "./Transaction.module.scss";
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin2Fill } from "react-icons/ri";
+import { downloadBudget } from "../engine";
 
 function Transaction({
+  username,
+  password,
+  setBudget,
   transaction,
   setIsEditing,
   setEditTransaction,
@@ -19,13 +23,24 @@ function Transaction({
   }
   function editRecord(e) {
     e.preventDefault();
-    setIsEditing(!isEditing);
-    setEditTransaction(transaction);
+
+    if (transaction.summary === true) {
+      const nowDay = transaction.date;
+      downloadBudget(username, password, setBudget, nowDay);
+    } else {
+      setIsEditing(!isEditing);
+      setEditTransaction(transaction);
+    }
   }
   function deleteRecord(e) {
     e.preventDefault();
-    setIsDeleting(true);
-    setEditTransaction(transaction);
+    if (transaction.summary === true) {
+      const nowDay = transaction.date;
+      downloadBudget(username, password, setBudget, nowDay);
+    } else {
+      setIsDeleting(true);
+      setEditTransaction(transaction);
+    }
   }
 
   return (

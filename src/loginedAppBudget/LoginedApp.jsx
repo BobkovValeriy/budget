@@ -50,34 +50,34 @@ function LoginedApp({ username, password }) {
   useEffect(() => {
     downloadBudget(username, password, setBudget);
   }, []);
-useEffect(() => {
-  const mediaQuery = window.matchMedia("(max-width: 1010px)");
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 1010px)");
 
-  const handleMediaQueryChange = (e) => {
-    if (e.matches) {
-      // При размере экрана <= 768px скрываем все элементы
-      setShowCalc(false);
-      setShowHistory(false);
-      setShowStatistic(false);
-      setShowForm(true);
-    } else {
-      // При размере экрана > 768px показываем все элементы
-      setShowCalc(true);
-      setShowHistory(true);
-      setShowStatistic(true);
-      setShowForm(true);
-    }
-  };
+    const handleMediaQueryChange = (e) => {
+      if (e.matches) {
+        // При размере экрана <= 768px скрываем все элементы
+        setShowCalc(false);
+        setShowHistory(false);
+        setShowStatistic(false);
+        setShowForm(true);
+      } else {
+        // При размере экрана > 768px показываем все элементы
+        setShowCalc(true);
+        setShowHistory(true);
+        setShowStatistic(true);
+        setShowForm(true);
+      }
+    };
 
-  // Устанавливаем обработчик изменения размера экрана
-  mediaQuery.addListener(handleMediaQueryChange);
+    // Устанавливаем обработчик изменения размера экрана
+    mediaQuery.addListener(handleMediaQueryChange);
 
-  // Вызываем функцию для начальной настройки
-  handleMediaQueryChange(mediaQuery);
+    // Вызываем функцию для начальной настройки
+    handleMediaQueryChange(mediaQuery);
 
-  // Очищаем обработчик при размонтировании компонента
-  return () => mediaQuery.removeListener(handleMediaQueryChange);
-}, []);
+    // Очищаем обработчик при размонтировании компонента
+    return () => mediaQuery.removeListener(handleMediaQueryChange);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -135,6 +135,9 @@ useEffect(() => {
                         setEditTransaction={setEditTransaction}
                         isEditing={isEditing}
                         setIsDeleting={setIsDeleting}
+                        username={username}
+                        password={password}
+                        setBudget={setBudget}
                       />
                     ))}
                   </ul>
@@ -147,6 +150,7 @@ useEffect(() => {
                   totalExpense={totalExpense}
                   remain={remain}
                   totalExpensesByType={totalExpensesByType}
+                  budget={budget}
                 />
               )}
             </div>
