@@ -14,7 +14,16 @@
   align-items: center;
   z-index: 1000;
   }
-
+   @media (max-width: 1010px) {
+  .editing__transaction {
+    height:70%
+  }
+  .edititng__wrapper{
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      z-index: 1000;
+   }}
   form {
   }
 

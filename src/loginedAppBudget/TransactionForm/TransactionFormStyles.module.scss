@@ -49,8 +49,8 @@
  @media (max-width: 1010px) {
   .incomes{
     margin-top: 0px;
-    max-height: 70vh;
-    height: 70vh;
+    max-height: 30vh;
+    // height: 20%;
   }
  }
 .income{
@@ -74,6 +74,7 @@
 @media (max-width: 1010px) {
   .form__container {
     flex: 1; /* Занимает все доступное пространство на маленьких экранах */
+    height: 100%;
     max-width: none; /* Убираем максимальную ширину формы */
   }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Summary.module.scss";
 
 const Summary = function ({
@@ -12,7 +12,6 @@ const Summary = function ({
   const [searchingWord, setSearchingWord] = useState("");
   const [selectedTypesForGraphic, setSelectedTypesForGraphic] = useState({});
   const [graphickData, setGraphickData] = useState({});
-  const canvasRef = useRef(null);
 
   useEffect(() => {
     const sortedExpenses = Object.entries(totalExpensesByType).sort(
@@ -37,6 +36,7 @@ const Summary = function ({
           .map((item) => item.trim());
         if (
           types.includes(typeName) &&
+          selectedTypesForGraphic[typeName] &&
           selectedTypesForGraphic[typeName].checked
         ) {
           if (!groupedExpenses[month]) {
@@ -55,78 +55,6 @@ const Summary = function ({
     console.log(graphickData);
     setGraphickData(groupedExpenses);
   }, [selectedTypesForGraphic, budget]);
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    // Очистим canvas перед отрисовкой новых данных
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Массив месяцев для отображения
-    const months = Object.keys(graphickData);
-
-    // Размеры canvas
-    const width = canvas.width;
-    const height = canvas.height;
-
-    // Максимальная сумма трат для определения масштаба графика
-    const maxExpense = Math.max(
-      ...Object.values(graphickData).flatMap((month) =>
-        Object.values(month).map((type) => type.total)
-      )
-    );
-
-    // Масштабы по осям X и Y
-    const scaleX = width / (months.length - 1);
-    const scaleY = height / maxExpense;
-
-    // Отрисовка оси X
-    ctx.beginPath();
-    ctx.moveTo(0, height);
-    ctx.lineTo(width, height);
-    ctx.stroke();
-
-    // Отрисовка оси Y
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, height);
-    ctx.stroke();
-
-    // Отрисовка линий для каждого типа траты
-    Object.entries(graphickData).forEach(([month, expenses]) => {
-      let prevX, prevY; // Объявляем переменные здесь
-
-      let x = months.indexOf(month) * scaleX;
-      let y = height;
-
-      Object.entries(expenses).forEach(([type, info]) => {
-        const { total, color } = info;
-        const expenseY = total * scaleY;
-
-        // Рисуем точку
-        ctx.beginPath();
-        ctx.arc(x, expenseY, 3, 0, 2 * Math.PI);
-        ctx.fillStyle = color;
-        ctx.fill();
-
-        // Соединяем точку с предыдущей, если она есть
-        if (prevX !== undefined && prevY !== undefined) {
-          ctx.beginPath();
-          ctx.moveTo(prevX, prevY);
-          ctx.lineTo(x, expenseY);
-          ctx.strokeStyle = color;
-          ctx.stroke();
-        }
-
-        // Сохраняем предыдущие координаты
-        prevX = x;
-        prevY = expenseY;
-
-        // Сдвигаемся к следующей точке
-        x += scaleX;
-      });
-    });
-  }, [graphickData]);
 
   function searchInBudget(event) {
     event.preventDefault();
@@ -213,12 +141,6 @@ const Summary = function ({
           </li>
         ))}
       </ul>
-      <canvas
-        ref={canvasRef}
-        width={"auto"}
-        max-height={20 + "vh"}
-        style={{ border: "1px solid black" }}
-      />
     </div>
   );
 };
