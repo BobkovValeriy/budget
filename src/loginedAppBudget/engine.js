@@ -5,7 +5,7 @@ export const downloadBudget = function (username, password, setBudget, nowDay) {
     setTimeout(() => {
         axios
             .post(
-                "https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/getbudget",
+                `${apiEndpoint}getbudget`,
                 { userName: username, password: password, nowDay: nowDay },
                 {
                     headers: {
@@ -120,7 +120,6 @@ export const addRecord = (e, incomes,
         transactionType: [],
     });
     setIncomes([{ target: "", amount: parseFloat(0) }]);
-    sortBudget(false, budget, setBudget);
 };
 export function compileIncome(budget) {
     return budget.reduce((total, transaction) => {

@@ -123,7 +123,13 @@ function LoginedApp({ username, password }) {
               {showHistory && (
                 <div className={styles.transactions}>
                   <h2>Список транзакций:</h2>
-                  <TransactionControls budget={budget} setBudget={setBudget} />
+                  <TransactionControls
+                    budget={budget}
+                    setBudget={setBudget}
+                    downloadBudget={() =>
+                      downloadBudget(username, password, setBudget)
+                    }
+                  />
                   <ul className={styles.transactions__records}>
                     {budget.map((transaction, index) => (
                       <Transaction
