@@ -47,25 +47,32 @@ function Transaction({
     <li
       className={transaction.type === "Доход" ? styles.income : styles.expense}
     >
-      <div className={styles.record__wrapper}>
+      <div
+        className={styles.record__wrapper}
+        onClick={(e) => {
+          e.stopPropagation();
+          transactionDetails(transaction);
+          console.log(transaction);
+        }}
+      >
         <button
-          onClick={(e) => editRecord(e)}
+          onClick={(e) => {
+            e.stopPropagation();
+            editRecord(e);
+          }}
           className={styles.change__record}
         >
           <FaEdit />
         </button>
-        <span
-          className={styles.record__sum}
-          onClick={(e) => {
-            e.stopPropagation();
-            transactionDetails(transaction);
-          }}
-        >
+        <span className={styles.record__sum}>
           {" "}
           Дата: {transaction.date}, Сумма: {transaction.amount}
         </span>
         <button
-          onClick={(e) => deleteRecord(e)}
+          onClick={(e) => {
+            e.stopPropagation();
+            deleteRecord(e);
+          }}
           className={styles.delete__record}
         >
           <RiDeleteBin2Fill />

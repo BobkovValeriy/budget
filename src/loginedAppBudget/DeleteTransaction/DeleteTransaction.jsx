@@ -19,28 +19,38 @@ function DeleteTransaction({
   };
 
   return (
-    <div className={styles.delete__transaction}>
-      <div className={styles.delete__transaction__wrapper}>
+    <div
+      className={styles.delete__transaction}
+      onClick={(e) => cancelDeleteRecord(e)}
+    >
+      <div
+        className={styles.delete__transaction__wrapper}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div>Вы желаете удалить запись?</div>
         <div className={styles.delete__transaction__controls}>
-          <button
-            onClick={(e) =>
-              deleteRecord(
-                e,
-                id,
-                username,
-                password,
-                setBudget,
-                budget,
-                setIsDeleting
-              )
-            }
-          >
-            <RiDeleteBin2Fill />
-          </button>
-          <button onClick={(e) => cancelDeleteRecord(e)}>
-            <FiDelete />
-          </button>
+          <div className={styles.delete__transaction__button}>
+            <button
+              onClick={(e) =>
+                deleteRecord(
+                  e,
+                  id,
+                  username,
+                  password,
+                  setBudget,
+                  budget,
+                  setIsDeleting
+                )
+              }
+            >
+              <RiDeleteBin2Fill />
+            </button>
+          </div>
+          <div className={styles.delete__transaction__button}>
+            <button onClick={(e) => cancelDeleteRecord(e)}>
+              <FiDelete />
+            </button>
+          </div>
         </div>
       </div>
     </div>

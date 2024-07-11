@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Summary.module.scss";
+import Graphik from "./Ggraphik/Graphik";
 
 const Summary = function ({
   totalIncome,
@@ -75,10 +76,17 @@ const Summary = function ({
   }
   const handleCheckboxChange = (event, type) => {
     const isChecked = event.target.checked;
-    setSelectedTypesForGraphic((prevState) => ({
-      ...prevState,
-      [type]: isChecked ? { ...prevState[type], checked: true } : undefined,
-    }));
+    setSelectedTypesForGraphic((prevState) => {
+      if (isChecked) {
+        return {
+          ...prevState,
+          [type]: { ...prevState[type], checked: true },
+        };
+      } else {
+        const { [type]: _, ...newState } = prevState; // Деструктуризация для удаления свойства
+        return newState;
+      }
+    });
   };
 
   const handleColorChange = (type, color) => {
@@ -141,6 +149,7 @@ const Summary = function ({
           </li>
         ))}
       </ul>
+      <Graphik graphickData={graphickData} />
     </div>
   );
 };

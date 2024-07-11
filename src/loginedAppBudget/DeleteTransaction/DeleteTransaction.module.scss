@@ -1,4 +1,4 @@
-.delete__transaction{
+.delete__transaction {
   position: fixed;
   top: 0;
   left: 0;
@@ -10,19 +10,32 @@
   align-items: center;
   z-index: 1000;
 }
-.delete__transaction__wrapper{
+
+.delete__transaction__wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #15202B; 
+  background-color: #15202B;
   width: 300px;
   height: 150px;
   border-radius: 4px;
 }
-.delete__transaction__controls{
-  margin-top: 30px;
+
+.delete__transaction__controls {
   display: flex;
-  align-items: center;
   justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  margin-top: 30px;
 }
+
+.delete__transaction__button {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+// .delete__transaction__button button {
+//   margin: 0 10px; /* Добавляет отступы между кнопками */
+// }
