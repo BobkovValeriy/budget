@@ -40,12 +40,11 @@
 }
 @media (max-width: 1010px) {
   .app__wrapper{
-    overflow-y: hidden;
     background-color: #15202B;
   }
   .budget {
     flex-direction: column;
-    height: 90vh;
+    height: auto;
   }
   .budget:empty{
     background-color: #15202B;
@@ -54,6 +53,7 @@
 
   .info__container {
     flex-direction: column; /* Изменяем направление flex-контейнера на вертикальное */
+    overflow-y: scroll;
   }
   .form_bar:empty {
     display: none; /* Оставляем скрытым, если у элемента нет содержимого */
