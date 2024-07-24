@@ -4,7 +4,11 @@ import Transaction from "./Transaction/Transaction";
 import TransactionForm from "./TransactionForm/TransactionForm";
 import EditTransaction from "./EditTransaction/editTransaction";
 import DeleteTransaction from "./DeleteTransaction/DeleteTransaction";
-import { addRecord, downloadBudget, recompileBudget } from "./engine";
+import {
+  addRecord,
+  downloadBudget,
+  recompileBudget,
+} from "../../src/engine.js";
 import Summary from "./Summary/Summary.jsx";
 import LoadingBars from "../preloading/LoadingBars";
 import Calculator from "./Calculator/Calculator";
@@ -32,6 +36,11 @@ function LoginedApp({ username, password }) {
   const [showHistory, setShowHistory] = useState(true);
   const [showStatistic, setShowStatistic] = useState(true);
   const [showForm, setShowForm] = useState(true);
+
+  useEffect(() => {
+    console.log("LoginedApp username:", username);
+    console.log("LoginedApp password:", password);
+  }, [username, password]);
 
   useEffect(() => {
     setRemain(totalIncome - totalExpense);

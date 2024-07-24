@@ -96,7 +96,7 @@ export const addRecord = (e, incomes,
                     "Content-Type": "application/json",
                 },
             }
-    )
+        )
         .then((response) => {
             if (response.data.status === "success") {
                 setBudget(prevBudget => {
@@ -172,3 +172,94 @@ export const sortBudget = (ascending, budget, setBudget) => {
     sortedBudget.sort(ascending ? compareDatesAsc : compareDatesDesc);
     setBudget(sortedBudget);
 };
+export async function registration(values,
+    setLogined,
+    setShowLoginMenu,
+    setShowRegisterMenu,
+    setUsername,
+    setPassword,
+    setErrors) {
+
+    try {
+        const response = await axios.post(
+            `${apiEndpoint}add_budget_user`,
+            {
+                userName: values.username,
+                userPass: values.password,
+            }
+        );
+
+        if (response.data.success) {
+            setUsername(values.username);
+            setPassword(values.password);
+            setLogined(true);
+            setShowLoginMenu(false);
+            setShowRegisterMenu(false);
+        } else {
+            // Ошибка при регистрации
+            console.error("Ошибка при регистрации:", response.data.error);
+            const errorMessageString = response.data.error;
+            const errorMessagesArray = errorMessageString.split(".");
+
+            // Создаём объект с ошибками для Formik
+            const formErrors = {};
+
+            errorMessagesArray.forEach((err) => {
+                if (err.trim() !== "") {
+                    const [field, message] = err.trim().split(':'); // Предполагаем, что сообщение ошибки имеет формат 'field: message'
+                    if (field && message) {
+                        formErrors[field] = (formErrors[field] || '') + message.trim() + ".";
+                    }
+                }
+            });
+
+            setErrors(formErrors);
+        }
+    } catch (error) {
+        // Ошибка при выполнении запроса
+        console.error("Ошибка при выполнении запроса:", error.message);
+    }
+}
+export async function checkLogin(values,
+    setLogined,
+    setShowLoginMenu,
+    setUsername,
+    setPassword,
+    setErrors
+) {
+
+    try {
+        const response = await axios.get(`${apiEndpoint}checklogin`, {
+            params: {
+                username: values.username,
+                password: values.password
+            }
+        });
+
+        // Проверяем, успешен ли запрос и код в ответе равен "logined"
+        if (response.data.login === "logined") {
+            // Устанавливаем состояния в соответствии с успешным входом
+            setUsername(values.username);
+            setPassword(values.password);
+            setLogined(true);
+            setShowLoginMenu(false);
+            // Возвращаем null, так как нет данных для возврата
+            return null;
+        } else if (response.data.login === "notlogined") {
+            console.error("Неверные учетные данные");
+            // Устанавливаем ошибку в Formik
+            setErrors({ username: "Неверные учетные данные", password: "Неверные учетные данные" });
+            return { error: "Неверные учетные данные" };
+        } else {
+            console.error("Некорректный ответ от сервера", response.data);
+            // Устанавливаем ошибку в Formik
+            setErrors({ username: "Некорректный ответ от сервера", password: "Некорректный ответ от сервера" });
+            return { error: "Некорректный ответ от сервера" };
+        }
+    } catch (error) {
+        console.error("Ошибка при выполнении запроса:", error.message);
+        // Устанавливаем ошибку в Formik
+        setErrors({ username: error.message, password: error.message });
+        return { error: error.message };
+    }
+}

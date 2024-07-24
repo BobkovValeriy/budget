@@ -2,7 +2,7 @@ import styles from "./editTransaction.module.scss";
 import { useState } from "react";
 import TransactionForm from "../TransactionForm/TransactionForm";
 import axios from "axios";
-import { downloadBudget, sortBudget, apiEndpoint } from "../engine";
+import { downloadBudget, sortBudget, apiEndpoint } from "../../../src/engine";
 
 function EditTransaction({
   transactionData,

@@ -1,7 +1,7 @@
 import styles from "./DeleteTransaction.module.scss";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { FiDelete } from "react-icons/fi";
-import { deleteRecord } from "../engine";
+import { deleteRecord } from "../../../src/engine";
 
 function DeleteTransaction({
   setIsDeleting,

@@ -2,7 +2,7 @@ import styles from "./Transaction.module.scss";
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin2Fill } from "react-icons/ri";
-import { downloadBudget } from "../engine";
+import { downloadBudget } from "../../../src/engine";
 
 function Transaction({
   username,
