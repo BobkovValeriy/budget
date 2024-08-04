@@ -152,7 +152,7 @@ const Summary = function ({
           </li>
         ))}
       </ul>
-      <Graphik graphickData={graphickData} />
+      <Graphik graphickData={graphickData} text={text} />
     </div>
   );
 };
