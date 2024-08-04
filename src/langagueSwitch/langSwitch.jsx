@@ -1,8 +1,8 @@
 import styles from "./langSwitch.module.scss";
 import { useDispatch } from "react-redux";
 import { textToRu, textToEn } from "../langReducer";
-import ru from "../images/lang/ru.png";
-import en from "../images/lang/en.png";
+import ru from "./lang/ru.png";
+import en from "./lang/en.png";
 
 const LangSwitch = () => {
   const dispatch = useDispatch();
