@@ -13,6 +13,7 @@ function Transaction({
   setEditTransaction,
   isEditing,
   setIsDeleting,
+  text,
 }) {
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [showTransaction, setShowTransaction] = useState(false);
@@ -66,7 +67,8 @@ function Transaction({
         </button>
         <span className={styles.record__sum}>
           {" "}
-          Дата: {transaction.date}, Сумма: {transaction.amount}
+          {text.transaction_date} {transaction.date}, {text.transaction_amount}{" "}
+          {transaction.amount}
         </span>
         <button
           onClick={(e) => {
@@ -82,7 +84,8 @@ function Transaction({
         selectedTransaction &&
         selectedTransaction === transaction && (
           <div className={styles.transaction__details}>
-            Расшифровка: {selectedTransaction.transactionType.join(", ")}
+            {text.transaction__details}{" "}
+            {selectedTransaction.transactionType.join(", ")}
           </div>
         )}
     </li>

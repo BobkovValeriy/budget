@@ -2,9 +2,10 @@ import styles from "./Login.module.scss";
 import { checkLogin } from "../engine";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import text from "../locales/text";
+import LangSwitch from "../langagueSwitch/langSwitch";
 
 const Login = ({
+  text,
   setLogined,
   setShowLoginMenu,
   setShowRegisterMenu,
@@ -17,8 +18,8 @@ const Login = ({
       password: "",
     },
     validationSchema: Yup.object({
-      username: Yup.string().required("Required"),
-      password: Yup.string().required("Required"),
+      username: Yup.string().required(text.log_required),
+      password: Yup.string().required(text.log_required),
     }),
     onSubmit: async (values) => {
       await checkLogin(
@@ -47,10 +48,11 @@ const Login = ({
           onClick={showRegistrationMenu}
           className={styles.login__nav_button}
         >
-          Регистрация
+          {text.registration}
         </button>
         <form className={styles.login_form} onSubmit={formik.handleSubmit}>
-          <label htmlFor="username">Имя пользователя:</label>
+          <LangSwitch />
+          <label htmlFor="username">{text.username}</label>
           <input
             type="text"
             id="username"
@@ -64,7 +66,7 @@ const Login = ({
             <div className={styles.error_message}>{formik.errors.username}</div>
           ) : null}
 
-          <label htmlFor="password">Пароль:</label>
+          <label htmlFor="password">{text.pass}</label>
           <input
             type="password"
             id="password"
@@ -78,7 +80,7 @@ const Login = ({
             <div className={styles.error_message}>{formik.errors.password}</div>
           ) : null}
 
-          <button type="submit">Войти</button>
+          <button type="submit">{text.in}</button>
         </form>
       </div>
     </div>

@@ -10,6 +10,7 @@ function DeleteTransaction({
   setBudget,
   username,
   password,
+  text,
 }) {
   let { id } = transactionData;
 
@@ -27,7 +28,7 @@ function DeleteTransaction({
         className={styles.delete__transaction__wrapper}
         onClick={(e) => e.stopPropagation()}
       >
-        <div>Вы желаете удалить запись?</div>
+        <div>{text.dt_delete}</div>
         <div className={styles.delete__transaction__controls}>
           <div className={styles.delete__transaction__button}>
             <button

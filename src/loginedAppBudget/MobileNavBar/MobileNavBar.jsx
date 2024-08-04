@@ -6,6 +6,7 @@ const MobileNavBar = function ({
   setShowHistory,
   setShowStatistic,
   setShowForm,
+  text,
 }) {
   const [showNav, setShowNav] = useState(false);
   function showNavOnClick() {
@@ -60,7 +61,7 @@ const MobileNavBar = function ({
           className={styles.MobileNavBarWrapper_button}
           onClick={showTransactionForm}
         >
-          новая транзакция
+          {text.new_transaction}
         </div>
       )}
       {showNav && (
@@ -68,7 +69,7 @@ const MobileNavBar = function ({
           className={styles.MobileNavBarWrapper_button}
           onClick={showTransactionStatistic}
         >
-          статистика транзакций
+          {text.transaction_statistic}
         </div>
       )}
       {showNav && (
@@ -76,7 +77,7 @@ const MobileNavBar = function ({
           className={styles.MobileNavBarWrapper_button}
           onClick={showTransactionHistory}
         >
-          история транзакций
+          {text.transaction_history}
         </div>
       )}
       {showNav && (
@@ -84,7 +85,7 @@ const MobileNavBar = function ({
           className={styles.MobileNavBarWrapper_button}
           onClick={showCalculator}
         >
-          калькулятор
+          {text.calc}
         </div>
       )}
       <div onClick={showNavOnClick}>

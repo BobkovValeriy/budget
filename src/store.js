@@ -1,4 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
+import langReducer from './langReducer';
 
 const initialState = {
     logined: false,
@@ -38,7 +39,8 @@ export const { setLogined, setShowLoginMenu, setShowRegisterMenu, setUsername, s
 
 const store = configureStore({
     reducer: {
-        app: appSlice.reducer
+        app: appSlice.reducer,
+        langReducer: langReducer
     }
 });
 

@@ -15,6 +15,7 @@ function EditTransaction({
   password,
   setFormData,
   formattedDate,
+  text,
 }) {
   let { amount, date, transactionType, type, id } = transactionData;
   const [dataFormForChange, setDataFormForChange] = useState({
@@ -107,7 +108,7 @@ function EditTransaction({
           budget={budget}
           setFormData={setFormData}
           formattedDate={formattedDate}
-          buttonText="обновить"
+          buttonText={text.et_update}
           exitButton={
             <div className={styles.exit__button__wrapper}>
               <button
@@ -115,7 +116,7 @@ function EditTransaction({
                 type="button"
                 onClick={closeEditing}
               >
-                отмена
+                {text.et_cancel}
               </button>
             </div>
           }

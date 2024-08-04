@@ -28,6 +28,7 @@
   flex-direction: column;
   overflow-y: scroll;
   position: relative;
+  text-transform: capitalize;
 }
 .transactions li {
   flex: 1;

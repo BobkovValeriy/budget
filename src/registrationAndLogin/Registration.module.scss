@@ -20,6 +20,7 @@
 
 .register__form label {
   margin-bottom: 5px;
+  color: orange
 }
 
 .register__form input {
@@ -30,16 +31,18 @@
 }
 
 .register__form button {
-  background-color: #007BFF;
+  background-color: rgba(127, 255, 212, 0.5);
+  border: 3px solid orange;
+  border-radius: 6px;
   color: #FFFFFF;
-  border: none;
   padding: 10px 15px;
   cursor: pointer;
 }
 .register__nav__button{
-  background-color: #007BFF;
+  background-color: rgba(127, 255, 212, 0.5);
+  border: 3px solid orange;
+  border-radius: 6px;
   color: #FFFFFF;
-  border: none;
   max-width: 300px;
   min-width:300px;
   padding: 10px 15px;
@@ -47,7 +50,7 @@
 }
 .register__nav__button:hover,
 .register__form button:hover {
-  background-color: #0056b3;
+  background-color: rgba(127, 255, 212, 0.294);
 }
 .error__message{
   flex: 0 1 auto;
@@ -60,5 +63,8 @@
   height: 78px;
 }
 .submit__button{
+  background-color: rgba(127, 255, 212, 0.5);
+  border: 3px solid orange;
+  border-radius: 6px;
   margin-top: 10px;
 }

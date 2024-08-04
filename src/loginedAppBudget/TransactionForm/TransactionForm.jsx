@@ -13,6 +13,7 @@ function TransactionForm({
   formattedDate,
   buttonText,
   exitButton = null,
+  text,
 }) {
   const { date = "", type = "Доход", transactionType = [] } = formData;
   useEffect(() => {
@@ -63,7 +64,7 @@ function TransactionForm({
         }
       >
         <div>
-          <label htmlFor="date">Дата:</label>
+          <label htmlFor="date">{text.tf_data}</label>
           <input
             type="date"
             id="date"
@@ -74,7 +75,7 @@ function TransactionForm({
           />
         </div>
         <div>
-          <label>Тип:</label>
+          <label>{text.tf_type}</label>
           <input
             type="radio"
             name="type"
@@ -83,7 +84,7 @@ function TransactionForm({
             checked={type === "Расход"}
             onChange={handleChange}
           />
-          <label htmlFor="expense">Расход</label>
+          <label htmlFor="expense">{text.tf_expence}</label>
           <input
             type="radio"
             name="type"
@@ -92,7 +93,7 @@ function TransactionForm({
             checked={type === "Доход"}
             onChange={handleChange}
           />
-          <label htmlFor="income">Доход</label>
+          <label htmlFor="income">{text.tf_income}</label>
         </div>
         <div className={styles.incomes}>
           {incomes.map((detail, index) => (
@@ -102,7 +103,7 @@ function TransactionForm({
                 id={`target-${index}`}
                 name="target"
                 value={detail.target}
-                placeholder="Цель траты"
+                placeholder={text.tf_placeholder_target}
                 onChange={(e) => handleIncomesChange(e, index)}
                 className={styles.income__target}
               />
@@ -111,7 +112,7 @@ function TransactionForm({
                 id={`amount-${index}`}
                 name="amount"
                 value={detail.amount}
-                placeholder="Сумма"
+                placeholder={text.tf_placeholder_amount}
                 onChange={(e) => handleIncomesChange(e, index)}
                 className={styles.income__amount}
               />

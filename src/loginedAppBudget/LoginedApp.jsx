@@ -15,7 +15,7 @@ import Calculator from "./Calculator/Calculator";
 import MobileNavBar from "./MobileNavBar/MobileNavBar";
 import TransactionControls from "./TransactionControls/TransactionControls";
 
-function LoginedApp({ username, password }) {
+function LoginedApp({ username, password, text }) {
   const now = new Date();
   const formattedDate = now.toISOString().split("T")[0];
   const [budget, setBudget] = useState([]);
@@ -103,6 +103,7 @@ function LoginedApp({ username, password }) {
         setShowHistory={setShowHistory}
         setShowStatistic={setShowStatistic}
         setShowForm={setShowForm}
+        text={text}
       />
       <div className={styles.budget}>
         {(showForm || showCalc) && (
@@ -118,7 +119,8 @@ function LoginedApp({ username, password }) {
                 budget={budget}
                 setFormData={setFormData}
                 formattedDate={formattedDate}
-                buttonText="Добавить"
+                buttonText={text.logined_trans_button_text}
+                text={text}
               />
             )}
             {showCalc && <Calculator />}
@@ -131,13 +133,14 @@ function LoginedApp({ username, password }) {
             <div className={styles.info__container}>
               {showHistory && (
                 <div className={styles.transactions}>
-                  <h2>Список транзакций:</h2>
+                  <h2>{text.logined_trans_list}</h2>
                   <TransactionControls
                     budget={budget}
                     setBudget={setBudget}
                     downloadBudget={() =>
                       downloadBudget(username, password, setBudget)
                     }
+                    text={text}
                   />
                   <ul className={styles.transactions__records}>
                     {budget.map((transaction, index) => (
@@ -153,6 +156,7 @@ function LoginedApp({ username, password }) {
                         username={username}
                         password={password}
                         setBudget={setBudget}
+                        text={text}
                       />
                     ))}
                   </ul>
@@ -166,6 +170,7 @@ function LoginedApp({ username, password }) {
                   remain={remain}
                   totalExpensesByType={totalExpensesByType}
                   budget={budget}
+                  text={text}
                 />
               )}
             </div>
@@ -183,6 +188,7 @@ function LoginedApp({ username, password }) {
             formattedDate={formattedDate}
             isEditing={isEditing}
             setIsEditing={setIsEditing}
+            text={text}
           />
         )}
         {isDeleting && (
@@ -193,6 +199,7 @@ function LoginedApp({ username, password }) {
             setBudget={setBudget}
             username={username}
             password={password}
+            text={text}
           />
         )}
       </div>

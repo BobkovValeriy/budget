@@ -8,6 +8,7 @@ const Summary = function ({
   remain,
   totalExpensesByType,
   budget,
+  text,
 }) {
   const [summaryExpenses, setSummaryExpenses] = useState([]);
   const [searchingWord, setSearchingWord] = useState("");
@@ -102,17 +103,19 @@ const Summary = function ({
   return (
     <div className={styles.summary}>
       <div>
-        Всего доход: <span className={styles.income}>{totalIncome}</span>
+        {text.sum_total_income}{" "}
+        <span className={styles.income}>{totalIncome}</span>
       </div>
       <div>
-        Всего расход: <span className={styles.expense}>{totalExpense}</span>
+        {text.sum_total_expence}{" "}
+        <span className={styles.expense}>{totalExpense}</span>
       </div>
       <div>
-        Остаток: <span className={styles.remain}>{remain}</span>
+        {text.sum_total_remain} <span className={styles.remain}>{remain}</span>
       </div>
 
       <div>
-        <label>Поиск по тратам:</label>
+        <label>{text.sum_search_in_budget}</label>
         <form onSubmit={searchInBudget} className={styles.searchInBudget}>
           <input
             type="text"
@@ -121,11 +124,11 @@ const Summary = function ({
             value={searchingWord}
           />
           <button type="submit" className={styles.darkButton}>
-            Поиск
+            {text.sum_search}
           </button>
         </form>
       </div>
-      <div>Общие затраты по типам:</div>
+      <div>{text.sum_summary_expenses_bytype}</div>
       <ul className={styles.expenciesByType}>
         {summaryExpenses.map(([type, total]) => (
           <li key={type}>

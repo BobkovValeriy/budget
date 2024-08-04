@@ -1,0 +1,24 @@
+.langague_switcher {
+    height: 110px;
+    max-width: 294px;
+    min-width: 294px;
+    background-color: rgba(127, 255, 212, 0.5);
+    display: flex;
+    text-align: center;
+    justify-content: space-evenly;
+    border: 3px solid orange;
+    border-radius: 11px;
+    margin: 10px 0;
+}
+
+.langague_ru, .langague_en {
+    flex: 0 0 100px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.langague_img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover; /* Увеличиваем/уменьшаем изображение до размера контейнера, сохраняя пропорции */
+}

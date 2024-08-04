@@ -3,7 +3,7 @@ import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 import styles from "./Graphik.module.scss";
 
-const Graphik = ({ graphickData }) => {
+const Graphik = ({ graphickData, text }) => {
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [],
@@ -53,7 +53,7 @@ const Graphik = ({ graphickData }) => {
       },
       title: {
         display: true,
-        text: "Расходы по месяцам",
+        text: text.expence_by_month,
       },
     },
     elements: {

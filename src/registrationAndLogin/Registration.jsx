@@ -2,8 +2,10 @@ import styles from "./Registration.module.scss";
 import { registration } from "../engine";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import LangSwitch from "../langagueSwitch/langSwitch";
 
 const Registration = ({
+  text,
   setLogined,
   setShowLoginMenu,
   setShowRegisterMenu,
@@ -18,22 +20,16 @@ const Registration = ({
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .min(4, "Имя пользователя должно содержать не менее 4 символов.")
-        .matches(
-          /^[a-zA-Z0-9]+$/,
-          "Имя пользователя может содержать только буквы и цифры."
-        )
-        .required("Required"),
+        .min(4, text.bevare_name_length)
+        .matches(/^[a-zA-Z0-9]+$/, text.bevare_name_matches)
+        .required(text.required),
       password: Yup.string()
-        .min(4, "Пароль не должен быть меньше 4х символов.")
-        .matches(
-          /^[a-zA-Z0-9]+$/,
-          "Пароль может содержать только буквы и цифры."
-        )
-        .required("Required"),
+        .min(4, text.bevare_pass_length)
+        .matches(/^[a-zA-Z0-9]+$/, text.bevare_pass_matches)
+        .required(text.required),
       passCheck: Yup.string()
-        .oneOf([Yup.ref("password"), null], "Пароли не совпадают.")
-        .required("Required"),
+        .oneOf([Yup.ref("password"), null], text.bevare_pass_check)
+        .required(text.required),
     }),
     onSubmit: (values) => {
       registration(
@@ -61,10 +57,11 @@ const Registration = ({
         onClick={showLogin}
         className={styles.register__nav__button}
       >
-        Вход
+        {text.reg_to_log}
       </button>
       <form className={styles.register__form} onSubmit={formik.handleSubmit}>
-        <label htmlFor="username">Имя пользователя:</label>
+        <LangSwitch />
+        <label htmlFor="username">{text.reg_username}</label>
         <input
           type="text"
           id="username"
@@ -77,7 +74,7 @@ const Registration = ({
           <div className={styles.error__message}>{formik.errors.username}</div>
         ) : null}
 
-        <label htmlFor="password">Пароль:</label>
+        <label htmlFor="password">{text.reg_pass}</label>
         <input
           type="password"
           id="password"
@@ -90,7 +87,7 @@ const Registration = ({
           <div className={styles.error__message}>{formik.errors.password}</div>
         ) : null}
 
-        <label htmlFor="passCheck">Повторите пароль:</label>
+        <label htmlFor="passCheck">{text.check_pass}</label>
         <input
           type="password"
           id="passCheck"
@@ -104,7 +101,7 @@ const Registration = ({
         ) : null}
 
         <button type="submit" className={styles.submit__button}>
-          Регистрация
+          {text.reg_button}
         </button>
       </form>
 
