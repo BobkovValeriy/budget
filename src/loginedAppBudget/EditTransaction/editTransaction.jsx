@@ -120,6 +120,7 @@ function EditTransaction({
               </button>
             </div>
           }
+          text={text}
         />
       </div>
     </div>

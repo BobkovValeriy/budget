@@ -46,6 +46,7 @@ const ru = {
     tr_contrl_oldbegin: "Сначала старые",
     tr_contrl_newbegin: "Сначала новые",
     tr_contrl_reload: "Обновить данные",
+    tr_contrl_find: "Искомый тип транзакции",
     //summary
     sum_total_income: "Всего доход:",
     sum_total_expence: "Всего расход:",

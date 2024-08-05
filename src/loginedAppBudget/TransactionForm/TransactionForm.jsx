@@ -24,7 +24,7 @@ function TransactionForm({
           .map((subItem) => subItem.trim());
         return { target, amount: parseFloat(amount) };
       });
-      setIncomes(incomeObjects);
+      setIncomes([...incomeObjects, { target: "", amount: parseFloat(0) }]);
     }
   }, []);
   const [incomes, setIncomes] = useState([

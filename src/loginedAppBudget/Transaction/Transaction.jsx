@@ -1,5 +1,5 @@
 import styles from "./Transaction.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { downloadBudget } from "../../../src/engine";
@@ -13,10 +13,12 @@ function Transaction({
   setEditTransaction,
   isEditing,
   setIsDeleting,
+  findTheTransactionType,
   text,
 }) {
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [showTransaction, setShowTransaction] = useState(false);
+  const [highlight, setHighlight] = useState(false);
 
   function transactionDetails(transaction) {
     setSelectedTransaction(transaction);
@@ -43,10 +45,15 @@ function Transaction({
       setEditTransaction(transaction);
     }
   }
+  useEffect(() => {
+    setHighlight(transaction.transactionType.includes(findTheTransactionType));
+  }, [findTheTransactionType, transaction.transactionType]);
 
   return (
     <li
-      className={transaction.type === "Доход" ? styles.income : styles.expense}
+      className={`${
+        transaction.type === "Доход" ? styles.income : styles.expense
+      } ${highlight ? styles.highlight : ""}`}
     >
       <div
         className={styles.record__wrapper}

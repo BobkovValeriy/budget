@@ -21,13 +21,16 @@
   padding: 10px;
   border: 1px solid gray;
 }
-.record__wrapper{
+.record__wrapper {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   padding-bottom: 10px;
 }
-.record__sum{
+.record__sum {
   padding-left: 30px;
+}
+.highlight {
+  background-color: yellow; /* Цвет подсветки */
 }

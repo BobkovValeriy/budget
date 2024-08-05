@@ -36,6 +36,7 @@ function LoginedApp({ username, password, text }) {
   const [showHistory, setShowHistory] = useState(true);
   const [showStatistic, setShowStatistic] = useState(true);
   const [showForm, setShowForm] = useState(true);
+  const [findTheTransactionType, setFindTheTransactionType] = useState("");
 
   useEffect(() => {
     console.log("LoginedApp username:", username);
@@ -135,6 +136,8 @@ function LoginedApp({ username, password, text }) {
                 <div className={styles.transactions}>
                   <h2>{text.logined_trans_list}</h2>
                   <TransactionControls
+                    setFindTheTransactionType={setFindTheTransactionType}
+                    findTheTransactionType={findTheTransactionType}
                     budget={budget}
                     setBudget={setBudget}
                     downloadBudget={() =>
@@ -156,6 +159,7 @@ function LoginedApp({ username, password, text }) {
                         username={username}
                         password={password}
                         setBudget={setBudget}
+                        findTheTransactionType={findTheTransactionType}
                         text={text}
                       />
                     ))}

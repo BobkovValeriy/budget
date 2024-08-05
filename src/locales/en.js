@@ -46,6 +46,7 @@ const en = {
     tr_contrl_oldbegin: "Oldest first",
     tr_contrl_newbegin: "Newest first",
     tr_contrl_reload: "Reload data",
+    tr_contrl_find: "Search transaction type",
     //summary
     sum_total_income: "Total income:",
     sum_total_expence: "Total expenses:",
