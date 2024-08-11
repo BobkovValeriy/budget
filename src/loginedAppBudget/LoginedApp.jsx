@@ -39,11 +39,6 @@ function LoginedApp({ username, password, text }) {
   const [findTheTransactionType, setFindTheTransactionType] = useState("");
 
   useEffect(() => {
-    console.log("LoginedApp username:", username);
-    console.log("LoginedApp password:", password);
-  }, [username, password]);
-
-  useEffect(() => {
     setRemain(totalIncome - totalExpense);
   }, [totalIncome, totalExpense]);
 

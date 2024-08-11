@@ -1,5 +1,5 @@
 import styles from "./Transaction.module.scss";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { downloadBudget } from "../../../src/engine";
@@ -18,7 +18,7 @@ function Transaction({
 }) {
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [showTransaction, setShowTransaction] = useState(false);
-  const [highlight, setHighlight] = useState(false);
+  const [checked, setChecked]= useState(false);
 
   function transactionDetails(transaction) {
     setSelectedTransaction(transaction);
@@ -46,21 +46,27 @@ function Transaction({
     }
   }
   useEffect(() => {
-    setHighlight(transaction.transactionType.includes(findTheTransactionType));
+    const isMatch = transaction.transactionType.some((tr) => {
+      let [name] = tr.split(":").map((item) => item.trim());
+      return name === findTheTransactionType;
+    });
+  
+    setChecked(isMatch);
+  
   }, [findTheTransactionType, transaction.transactionType]);
 
   return (
     <li
       className={`${
-        transaction.type === "Доход" ? styles.income : styles.expense
-      } ${highlight ? styles.highlight : ""}`}
+        transaction.type === "Доход" ? (checked?styles.income_checked:styles.income) : (checked? styles.expense_checked: styles.expense)
+      }`}
     >
       <div
         className={styles.record__wrapper}
         onClick={(e) => {
           e.stopPropagation();
           transactionDetails(transaction);
-          console.log(transaction);
+          console.log(checked)
         }}
       >
         <button
@@ -91,8 +97,19 @@ function Transaction({
         selectedTransaction &&
         selectedTransaction === transaction && (
           <div className={styles.transaction__details}>
-            {text.transaction__details}{" "}
-            {selectedTransaction.transactionType.join(", ")}
+            {text.transaction__details}
+            {selectedTransaction.transactionType.map((tr, index) => {
+              let [name, amount] = tr.split(":").map((item) => item.trim());
+              if (!name) return null;
+              return (
+                <span 
+                  key={index} 
+                  className={name === findTheTransactionType ? styles.highlight : ""}
+                >
+                  {`${tr}, `}
+                </span>
+              );
+              })}
           </div>
         )}
     </li>

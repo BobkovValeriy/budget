@@ -4,7 +4,13 @@
   color: green;
   display: flex;
   flex-direction: column;
-  /*justify-content: space-around; */
+}
+.income_checked{
+  flex: 1;
+  background-color: yellow;
+  color: green;
+  display: flex;
+  flex-direction: column;
 }
 
 .expense {
@@ -12,8 +18,13 @@
   background-color: bisque;
   color: red;
   display: flex;
-  /*justify-content: space-around; */
-
+  flex-direction: column;
+}
+.expense_checked{
+  flex: 1;
+  background-color: yellow;
+  color: red;
+  display: flex;
   flex-direction: column;
 }
 .transaction__details {
@@ -28,9 +39,17 @@
   align-items: center;
   padding-bottom: 10px;
 }
+.record__wrapper__highlight{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border: 3px solid yellow
+}
 .record__sum {
   padding-left: 30px;
 }
-.highlight {
-  background-color: yellow; /* Цвет подсветки */
+.highlight{
+  background-color: yellow;
 }
