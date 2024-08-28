@@ -1,5 +1,5 @@
 .langague_switcher {
-    height: 110px;
+    height: 90px;
     max-width: 294px;
     min-width: 294px;
     background-color: rgba(127, 255, 212, 0.5);
@@ -10,15 +10,26 @@
     border-radius: 11px;
     margin: 10px 0;
 }
-
-.langague_ru, .langague_en {
+.langague_switcher button{
+    border: none;
+}
+.langague {
     flex: 0 0 100px;
     text-align: center;
     cursor: pointer;
+    user-select: none;
 }
 
 .langague_img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover; /* Увеличиваем/уменьшаем изображение до размера контейнера, сохраняя пропорции */
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    user-select: none;
+    opacity: 0.9;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+}
+
+.langague_img:hover {
+    transform: scale(1.1);
+    opacity: 1; /* Возвращаем непрозрачность на 100% */
 }

@@ -3,34 +3,41 @@ import { registration } from "../engine";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import LangSwitch from "../langagueSwitch/langSwitch";
+import { useSelector } from "react-redux";
+import React, { useEffect } from 'react';
 
 const Registration = ({
-  text,
   setLogined,
   setShowLoginMenu,
   setShowRegisterMenu,
   setUsername,
   setPassword,
 }) => {
+  const text = useSelector((state) => state.langReducer);
+  
+  // Создаем начальную схему валидации
+  const initialValidationSchema = Yup.object({
+    username: Yup.string()
+      .min(4, text.bevare_name_length)
+      .matches(/^[a-zA-Z0-9]+$/, text.bevare_name_matches)
+      .required(text.required),
+    password: Yup.string()
+      .min(4, text.bevare_pass_length)
+      .matches(/^[a-zA-Z0-9]+$/, text.bevare_pass_matches)
+      .required(text.required),
+    passCheck: Yup.string()
+      .oneOf([Yup.ref("password"), null], text.bevare_pass_check)
+      .required(text.required),
+  });
+
+  // Инициализируем Formik с начальной схемой валидации
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
       passCheck: "",
     },
-    validationSchema: Yup.object({
-      username: Yup.string()
-        .min(4, text.bevare_name_length)
-        .matches(/^[a-zA-Z0-9]+$/, text.bevare_name_matches)
-        .required(text.required),
-      password: Yup.string()
-        .min(4, text.bevare_pass_length)
-        .matches(/^[a-zA-Z0-9]+$/, text.bevare_pass_matches)
-        .required(text.required),
-      passCheck: Yup.string()
-        .oneOf([Yup.ref("password"), null], text.bevare_pass_check)
-        .required(text.required),
-    }),
+    validationSchema: initialValidationSchema,
     onSubmit: (values) => {
       registration(
         values,
@@ -43,6 +50,16 @@ const Registration = ({
       );
     },
   });
+
+  useEffect(() => {
+    // Обновляем схему валидации при изменении text
+    formik.setFieldValue("username", formik.values.username); // Перезаписываем значения
+    formik.setFieldValue("password", formik.values.password); // Перезаписываем значения
+    formik.setFieldValue("passCheck", formik.values.passCheck); // Перезаписываем значения
+
+    // Обновляем состояние Formik вручную
+    formik.validateForm(); // Валидируем форму, чтобы обновить ошибки
+  }, [text]);
 
   function showLogin(e) {
     e.preventDefault();

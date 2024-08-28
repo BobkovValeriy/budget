@@ -3,15 +3,16 @@ import { checkLogin } from "../engine";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import LangSwitch from "../langagueSwitch/langSwitch";
+import { useSelector } from "react-redux";
 
 const Login = ({
-  text,
   setLogined,
   setShowLoginMenu,
   setShowRegisterMenu,
   setUsername,
   setPassword,
 }) => {
+  const text = useSelector((state) => state.langReducer);
   const formik = useFormik({
     initialValues: {
       username: "",

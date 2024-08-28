@@ -14,8 +14,10 @@ import LoadingBars from "../preloading/LoadingBars";
 import Calculator from "./Calculator/Calculator";
 import MobileNavBar from "./MobileNavBar/MobileNavBar";
 import TransactionControls from "./TransactionControls/TransactionControls";
+import { useSelector } from "react-redux";
 
-function LoginedApp({ username, password, text }) {
+function LoginedApp({ username, password}) {
+  const text = useSelector((state) => state.langReducer);
   const now = new Date();
   const formattedDate = now.toISOString().split("T")[0];
   const [budget, setBudget] = useState([]);

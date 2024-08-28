@@ -1,5 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import langReducer from './langReducer';
+import langReducer from './langagueSwitch/langReducer';
 
 const initialState = {
     logined: false,

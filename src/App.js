@@ -3,29 +3,34 @@ import Login from './registrationAndLogin/Login';
 import { useSelector, useDispatch } from 'react-redux';
 import { setLogined, setShowLoginMenu, setShowRegisterMenu, setUsername, setPassword } from './store.js';
 import Registration from './registrationAndLogin/Registration.jsx';
-import { textToRu, textToEn } from "./langReducer.js"
-import { useEffect } from 'react';
+import { textTranslate} from "./langagueSwitch/langReducer.js"
+import { useEffect, useState } from 'react';
+import { getCountryCode } from './engine.js';
 
 function App() {
+  
   const dispatch = useDispatch();
-  const currentLocale = navigator.language.split('-')[0];
+  const [currentLocale, setCurrentLocale] = useState("");
   const { logined, showLoginMenu, showRegisterMenu, username, password } = useSelector(state => state.app);
-  const text = useSelector((state) => state.langReducer);
 
   useEffect(() => {
-    if (currentLocale === "ru") {
-      dispatch(textToRu())
-    } else {
-      dispatch(textToEn())
+    async function fetchCountryCode() {
+      const countryCode = await getCountryCode();
+      setCurrentLocale(countryCode);
     }
-  }, [currentLocale, dispatch]);
+  
+    fetchCountryCode();
+  }, []);
+
+  useEffect(() => {
+      dispatch(textTranslate(currentLocale))
+  }, [currentLocale]);
 
   return (
     <div>
-      {logined ? <LoginedApp username={username} password={password} text={text} /> : null}
+      {logined ? <LoginedApp username={username} password={password}/> : null}
       {showLoginMenu ? (
         <Login
-          text={text}
           logined={logined}
           setLogined={(value) => dispatch(setLogined(value))}
           setUsername={(value) => dispatch(setUsername(value))}
@@ -36,7 +41,6 @@ function App() {
       ) : null}
       {showRegisterMenu ? (
         <Registration
-          text={text}
           logined={logined}
           setLogined={(value) => dispatch(setLogined(value))}
           setUsername={(value) => dispatch(setUsername(value))}

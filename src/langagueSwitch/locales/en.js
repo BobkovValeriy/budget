@@ -9,9 +9,9 @@ const en = {
     //registration
     required: "required",
     bevare_name_length: "Username must be at least 4 characters long.",
-    bevare_name_matches: "Username can only contain letters and numbers.",
+    bevare_name_matches: "Username can only contain latin letters and numbers.",
     bevare_pass_length: "Password must be at least 4 characters long.",
-    bevare_pass_matches: "Password can only contain letters and numbers.",
+    bevare_pass_matches: "Password can only contain latin letters and numbers.",
     bevare_pass_check: "Passwords do not match.",
     reg_pass: "Password:",
     reg_to_log: "LOGIN",
