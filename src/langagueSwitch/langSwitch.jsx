@@ -12,51 +12,78 @@ const LangSwitch = () => {
   const lang = useSelector((state) => state.langReducer.langague);
   const [index, setIndex] = useState(0);
   const dispatch = useDispatch();
+  const [showAllLang, setShowAllLang] = useState(false);
+
+  function showAll(e){
+    e.preventDefault()
+    e.stopPropagation()
+    setShowAllLang(!showAllLang)
+    console.log(showAllLang)
+  }
+
+  function choseLang(e, lan){
+    e.preventDefault()
+    e.stopPropagation()
+    dispatch(textTranslate(lan))
+    setShowAllLang(false)
+  }
 
   const langagueArr = [
-    { code: "RU", src: RU },
     { code: "EN", src: EN },
+    { code: "DE", src: DE },
     { code: "UA", src: UA },
     { code: "FR", src: FR },
-    { code: "DE", src: DE },
+    { code: "RU", src: RU },
   ];
 
   const visibleLangs = langagueArr.filter(l => !(l.code === "RU" && lang === "UA"));
 
-  const handleNext = () => {
+  const handleNext = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
     setIndex((prevIndex) => (prevIndex + 1) % visibleLangs.length);
   };
 
-  const handlePrev = () => {
+  const handlePrev = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
     setIndex((prevIndex) =>
       prevIndex === 0 ? visibleLangs.length - 1 : prevIndex - 1
     );
   };
 
   const getDisplayedLangs = () => {
-    if (visibleLangs.length === 1) return visibleLangs;
-    const firstLang = visibleLangs[index];
-    const secondLang = visibleLangs[(index + 1) % visibleLangs.length];
-    return [firstLang, secondLang];
+    if (showAllLang) {
+      return visibleLangs;
+    } else if (visibleLangs.length === 1) {
+      return visibleLangs;
+    } else {
+      const firstLang = visibleLangs[index];
+      const secondLang = visibleLangs[(index + 1) % visibleLangs.length];
+      return [firstLang, secondLang];
+    }
   };
 
   const displayedLangs = getDisplayedLangs();
 
   return (
-    <div className={styles.langague_switcher}>
-      <button onClick={handlePrev}>←</button>
+    <div 
+      className={`${styles.langague_switcher} ${showAllLang ? styles.expanded : ''}`} 
+      onClick={(e)=>showAll(e)}
+    >
+      {!showAllLang && <div onClick={(e)=>handlePrev(e)} className={styles.lang_button}>←</div>}
       {displayedLangs.map((lan) => (
         <div key={lan.code} className={styles.langague}>
           <img
             src={lan.src}
             alt={lan.code}
             className={styles.langague_img}
-            onClick={() => dispatch(textTranslate(lan.code))}
+            onClick={(e) => choseLang(e, lan.code)}
             draggable="false"
           />
         </div>
       ))}
-      <button onClick={handleNext}>→</button>
+      {!showAllLang && <div onClick={(e)=>handleNext(e)} className={styles.lang_button}>→</div>}
     </div>
   );
 };

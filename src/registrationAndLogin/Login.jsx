@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import LangSwitch from "../langagueSwitch/langSwitch";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const Login = ({
   setLogined,
@@ -33,7 +34,15 @@ const Login = ({
       );
     },
   });
+  useEffect(() => {
+    // Обновляем схему валидации при изменении text
+    formik.setFieldValue("username", formik.values.username); // Перезаписываем значения
+    formik.setFieldValue("password", formik.values.password); // Перезаписываем значения
 
+    // Обновляем состояние Formik вручную
+    formik.validateForm(); // Валидируем форму, чтобы обновить ошибки
+  }, [text]);
+  
   function showRegistrationMenu(e) {
     e.preventDefault();
     setShowLoginMenu(false);
