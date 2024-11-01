@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 import styles from "../App.module.scss";
 import Transaction from "./Transaction/Transaction";
 import TransactionForm from "./TransactionForm/TransactionForm";
@@ -14,10 +14,13 @@ import LoadingBars from "../preloading/LoadingBars";
 import Calculator from "./Calculator/Calculator";
 import MobileNavBar from "./MobileNavBar/MobileNavBar";
 import TransactionControls from "./TransactionControls/TransactionControls";
+import AppMessage from "./AppMessage/AppMessage.jsx";
 import { useSelector } from "react-redux";
+
 
 function LoginedApp({ username, password}) {
   const text = useSelector((state) => state.langReducer);
+  const message = useSelector((state)=> state.app.message)
   const now = new Date();
   const formattedDate = now.toISOString().split("T")[0];
   const [budget, setBudget] = useState([]);
@@ -39,11 +42,12 @@ function LoginedApp({ username, password}) {
   const [showStatistic, setShowStatistic] = useState(true);
   const [showForm, setShowForm] = useState(true);
   const [findTheTransactionType, setFindTheTransactionType] = useState("");
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
     setRemain(totalIncome - totalExpense);
   }, [totalIncome, totalExpense]);
-
+  //пересчёт данных при изменении budget
   useEffect(() => {
     recompileBudget(
       budget,
@@ -53,10 +57,27 @@ function LoginedApp({ username, password}) {
     );
     setRemain(totalIncome - totalExpense);
   }, [budget]);
+  const [displayedBudget, setDisplayedBudget] = useState([]);
 
+  useEffect(() => {
+    const addTransactionsWithDelay = async () => {
+      // Очищаем список перед добавлением
+      setDisplayedBudget([]);
+
+      for (let i = 0; i < budget.length; i++) {
+        setDisplayedBudget((prev) => [...prev, budget[i]]);
+        // Задержка ms между добавлением транзакций
+        await delay(15);
+      }
+    };
+
+    addTransactionsWithDelay();
+  }, [budget]);
+  //Первичная загрузка данных с сервера
   useEffect(() => {
     downloadBudget(username, password, setBudget);
   }, []);
+  // Компоновка елементов для моб или полноэкранной версии
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 1010px)");
 
@@ -96,6 +117,9 @@ function LoginedApp({ username, password}) {
 
   return (
     <div className={styles.app__wrapper}>
+      {message? <AppMessage
+        message={message}
+      />:null}
       <MobileNavBar
         setShowCalc={setShowCalc}
         setShowHistory={setShowHistory}
@@ -142,8 +166,8 @@ function LoginedApp({ username, password}) {
                     }
                     text={text}
                   />
-                  <ul className={styles.transactions__records}>
-                    {budget.map((transaction, index) => (
+                  <div className={styles.transactions__records}>
+                    {displayedBudget.map((transaction, index) => (
                       <Transaction
                         key={index}
                         transaction={transaction}
@@ -160,7 +184,7 @@ function LoginedApp({ username, password}) {
                         text={text}
                       />
                     ))}
-                  </ul>
+                  </div>
                 </div>
               )}
 

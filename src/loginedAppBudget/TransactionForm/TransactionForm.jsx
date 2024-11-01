@@ -1,5 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./TransactionFormStyles.module.scss";
+import { useDispatch, useSelector } from "react-redux";
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.css";
+import { Russian } from "flatpickr/dist/l10n/ru.js"; 
+import { French } from "flatpickr/dist/l10n/fr.js"; 
+import { German } from "flatpickr/dist/l10n/de.js"; 
+import { setMessage } from "../../store";
 
 function TransactionForm({
   handleChange,
@@ -15,7 +22,86 @@ function TransactionForm({
   exitButton = null,
   text,
 }) {
+  const dispatch = useDispatch()
   const { date = "", type = "Доход", transactionType = [] } = formData;
+  const lang = useSelector((state) => state.langReducer.langague);
+  const datePickerRef = useRef(null);
+  const Ukrainian = {
+    weekdays: {
+      shorthand: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+      longhand: [
+        "Неділя",
+        "Понеділок",
+        "Вівторок",
+        "Середа",
+        "Четвер",
+        "П’ятниця",
+        "Субота",
+      ],
+    },
+    months: {
+      shorthand: [
+        "Січ",
+        "Лют",
+        "Бер",
+        "Квіт",
+        "Трав",
+        "Черв",
+        "Лип",
+        "Серп",
+        "Вер",
+        "Жовт",
+        "Лист",
+        "Груд",
+      ],
+      longhand: [
+        "Січень",
+        "Лютий",
+        "Березень",
+        "Квітень",
+        "Травень",
+        "Червень",
+        "Липень",
+        "Серпень",
+        "Вересень",
+        "Жовтень",
+        "Листопад",
+        "Грудень",
+      ],
+    },
+    firstDayOfWeek: 1, // Понедельник — первый день недели
+  };
+  useEffect(() => {
+    const localeMapping = {
+      RU: Russian,
+      FR: French,
+      DE: German,
+      UA: Ukrainian,
+      EN: null,
+    };
+
+    const locale = localeMapping[lang] || null;
+
+    // Инициализируем Flatpickr с локалью
+    flatpickr(datePickerRef.current, {
+      locale: locale,
+      dateFormat: "Y-m-d",
+      defaultDate: formattedDate,  // форматированная дата
+    });
+  }, [lang]);
+
+  function showAddErrorFunction(){
+    dispatch(setMessage(text.tf_error))
+    setTimeout(() => {
+      dispatch(setMessage(''))
+    }, 3000);
+  }
+  function showAddCompliteFunction(){
+    dispatch(setMessage(text.tf_complite))
+    setTimeout(() => {
+      dispatch(setMessage(''))
+    }, 500);
+  }
   useEffect(() => {
     if (Array.isArray(transactionType) && transactionType.length > 0) {
       const incomeObjects = transactionType.map((item) => {
@@ -52,25 +138,26 @@ function TransactionForm({
           handleSubmit(
             e,
             incomes,
+            showAddErrorFunction,
+            showAddCompliteFunction,
             setIncomes,
             formData,
             username,
             password,
             setBudget,
-            budget,
             setFormData,
-            formattedDate
+            formattedDate,
+            budget,
           )
         }
       >
         <div>
           <label htmlFor="date">{text.tf_data}</label>
           <input
-            type="date"
+            type="text"
             id="date"
             name="date"
-            value={date}
-            onChange={handleChange}
+            ref={datePickerRef}  // Привязка к рефу
             required
           />
         </div>

@@ -51,7 +51,7 @@ function EditTransaction({
     setIsEditing(false);
   };
 
-  const handleSubmit = async (e, incomes) => {
+  const handleSubmit = async (e, incomes, showAddErrorFunction) => {
     e.preventDefault();
     const arrayToSend = [];
     let total = parseFloat(0);
@@ -85,12 +85,13 @@ function EditTransaction({
       downloadBudget(username, password, setBudget, setReceivedData);
       sortBudget(false, budget, setBudget);
       console.log("Запись успешно обновлена!", updateResponse.data);
+      setIsEditing(!isEditing);
     } catch (error) {
       // Обработка ошибок
+      showAddErrorFunction()
       console.error("Ошибка при обновлении записи:", error);
       // Дополнительные действия, например, уведомление пользователя об ошибке
     }
-    setIsEditing(!isEditing);
   };
   return (
     <div className={styles.editing__transaction} onClick={closeEditing}>

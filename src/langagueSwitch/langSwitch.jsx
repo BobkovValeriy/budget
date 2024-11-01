@@ -18,7 +18,6 @@ const LangSwitch = () => {
     e.preventDefault()
     e.stopPropagation()
     setShowAllLang(!showAllLang)
-    console.log(showAllLang)
   }
 
   function choseLang(e, lan){

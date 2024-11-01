@@ -37,11 +37,15 @@ const de = {
     tf_income: "Einnahme",
     tf_placeholder_target: "Ziel der Ausgabe",
     tf_placeholder_amount: "Betrag",
+    tf_error: "Leider ist die Aktion fehlgeschlagen. Bitte versuchen Sie es später erneut.",
+    tf_complite: "Eintrag hinzugefügt",
     //edit transaction
     et_update: "aktualisieren",
     et_cancel: "abbrechen",
     //delete transaction
     dt_delete: "Möchten Sie den Eintrag löschen?",
+    dt_error: "Leider ist das Löschen fehlgeschlagen, bitte versuchen Sie es später erneut.",
+    dt_complite: "Aufzeichnung gelöscht",
     //transaction controls
     tr_contrl_oldbegin: "Älteste zuerst",
     tr_contrl_newbegin: "Neueste zuerst",

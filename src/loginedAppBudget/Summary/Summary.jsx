@@ -54,7 +54,6 @@ const Summary = function ({
         }
       });
     });
-    console.log(graphickData);
     setGraphickData(groupedExpenses);
   }, [selectedTypesForGraphic, budget]);
 

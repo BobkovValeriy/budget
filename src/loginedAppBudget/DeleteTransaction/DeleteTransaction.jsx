@@ -2,6 +2,9 @@ import styles from "./DeleteTransaction.module.scss";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { FiDelete } from "react-icons/fi";
 import { deleteRecord } from "../../../src/engine";
+import { useDispatch } from "react-redux";
+import { setMessage } from "../../store";
+import { useState } from "react";
 
 function DeleteTransaction({
   setIsDeleting,
@@ -12,12 +15,27 @@ function DeleteTransaction({
   password,
   text,
 }) {
+  const dispatch = useDispatch()
   let { id } = transactionData;
+  const [showAddError, setShowAddError] = useState(false);
 
   const cancelDeleteRecord = (e) => {
     e.preventDefault();
     setIsDeleting(false);
   };
+
+  function showDeleteErrorFunction(){
+    dispatch(setMessage(text.dt_error))
+    setTimeout(() => {
+      dispatch(setMessage(''))
+    }, 3000);
+  }
+  function showDeleteCompliteFunction(){
+    dispatch(setMessage(text.dt_complite))
+    setTimeout(() => {
+      dispatch(setMessage(''))
+    }, 500);
+  }
 
   return (
     <div
@@ -40,7 +58,9 @@ function DeleteTransaction({
                   password,
                   setBudget,
                   budget,
-                  setIsDeleting
+                  setIsDeleting,
+                  showDeleteErrorFunction,
+                  showDeleteCompliteFunction,
                 )
               }
             >

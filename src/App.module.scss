@@ -30,6 +30,43 @@
   position: relative;
   text-transform: capitalize;
 }
+.topIndicator {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px; /* Высота индикатора */
+  background: rgba(255, 255, 0, 0.5); /* Полупрозрачный жёлтый фон */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10; /* Убедись, что индикатор выше по z-index */
+  pointer-events: none; /* Чтобы индикатор не мешал взаимодействию с остальной частью списка */
+}
+
+.bottomIndicator {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px; /* Высота индикатора */
+  background: rgba(255, 255, 0, 0.5); /* Полупрозрачный жёлтый фон */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.topIndicator {
+  top: 0;
+  height: 20px;
+}
+
+.bottomIndicator {
+  bottom: 0;
+  height: 20px;
+}
 .transactions li {
   flex: 1;
   margin-bottom: 5px; 

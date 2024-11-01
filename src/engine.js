@@ -1,125 +1,82 @@
 import axios from "axios";
 export const apiEndpoint =
     "https://eu-central-1.aws.data.mongodb-api.com/app/data-yjqvx/endpoint/";
-export const downloadBudget = function (username, password, setBudget, nowDay) {
-    setTimeout(() => {
-        axios
-            .post(
-                `${apiEndpoint}getbudget`,
-                { userName: username, password: password, nowDay: nowDay },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            )
-            .then((response) => {
-                if (response.data.status === "success") {
-                    const sortedBudget = [...response.data.resultArray]
-                    //changing logic
-
-
-                    sortedBudget.sort(compareDatesDesc)
-                    setBudget(sortedBudget);
-                } else {
-                    console.error(response.data.message);
-                }
-            })
-            .catch((error) => {
-                console.error("Ошибка при получении данных:", error);
-            });
-    }, 1000)
-}
-export const deleteRecord = async (e, id, username, password, setBudget, budget, setIsDeleting) => {
+const sendRequest = async (url, method = 'post', data = {}, headers = {}) => {
+  try {
+    const response = await axios({
+      method: method,
+      url: `${apiEndpoint}${url}`,
+      data: data,
+      headers: { "Content-Type": "application/json", ...headers },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Ошибка при выполнении запроса к ${url}:`, error.message);
+    throw error;
+  }
+};
+export const downloadBudget = async (username, password, setBudget, nowDay) => {
+    try {
+      const response = await sendRequest('getbudget', 'post', { userName: username, password: password, nowDay: nowDay });
+      if (response.status === "success") {
+        const sortedBudget = [...response.resultArray].sort(compareDatesDesc);
+        setBudget(sortedBudget);
+      } else {
+        console.error(response.message);
+      }
+    } catch (error) {
+      console.error("Ошибка при получении данных:", error);
+    }
+};
+export const deleteRecord = async (e, id, username, password, setBudget, setIsDeleting, showDeleteErrorFunction, showDeleteCompliteFunction) => {
     e.preventDefault();
     try {
-        // Отправка данных на удаление записи
-        const deleteResponse = await axios.post(
-            `${apiEndpoint}deletebudgetrecord`,
-            { id: id, username: username, password: password },
-            { headers: { "Content-Type": "application/json" } }
-        );
-
-        console.log("Запись успешно удалена!", deleteResponse.data);
-
-        // Получение бюджета после успешного удаления
-        downloadBudget(username, password, setBudget);
+      await sendRequest('deletebudgetrecord', 'post', { id: id, username: username, password: password });
+      await downloadBudget(username, password, setBudget);
+      setIsDeleting(false);
+      showDeleteCompliteFunction();
     } catch (error) {
-        // Обработка ошибок
-        console.error("Ошибка при удалении записи:", error);
-        // Дополнительные действия, например, уведомление пользователя об ошибке
+      showDeleteErrorFunction();
     }
-    setIsDeleting(false);
-};
-export const addRecord = (e, incomes,
-    setIncomes,
-    formData,
-    username,
-    password,
-    setBudget,
-    budget,
-    setFormData,
-    formattedDate) => {
-    e.preventDefault();
-    const arrayToSend = [];
-    let total = parseFloat(0);
-    incomes.map((income) => {
-        if (
-            income.target !== "" &&
-            !isNaN(income.amount) &&
-            typeof income.amount !== "undefined"
-        ) {
-            total += parseFloat(income.amount);
-            arrayToSend.push(income.target + ":" + income.amount);
-        }
+  };
+export const addRecord = async (e, incomes, showAddErrorFunction, showAddCompliteFunction, setIncomes, formData, username, password, setBudget, setFormData, formattedDate) => {
+  e.preventDefault();
+
+  const arrayToSend = incomes
+    .filter(income => income.target !== "" && !isNaN(income.amount))
+    .map(income => `${income.target}:${income.amount}`);
+
+  const total = incomes.reduce((sum, income) => sum + parseFloat(income.amount || 0), 0);
+
+  const newTransaction = {
+    id: new Date(), 
+    date: formData.date,
+    amount: total,
+    type: formData.type,
+    transactionType: arrayToSend,
+  };
+
+  try {
+    const response = await sendRequest('addrecord', 'post', {
+      userName: username,
+      password: password,
+      transaction: newTransaction,
     });
 
-    const newTransaction = {
-        id: new Date(), // Генерируем номер для новой транзакции
-        date: formData.date,
-        amount: total,
-        type: formData.type,
-        transactionType: arrayToSend,
-    };
-
-    // Добавляем новую транзакцию на сервер
-    axios
-        .post(
-            `${apiEndpoint}addrecord`,
-            {
-                userName: username,
-                password: password,
-                transaction: newTransaction,
-            },
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        )
-        .then((response) => {
-            if (response.data.status === "success") {
-                setBudget(prevBudget => {
-                    const newBudget = [...prevBudget, newTransaction];
-                    sortBudget(false, newBudget, setBudget);
-                    return newBudget;
-                });
-            } else {
-                console.error(response.data.message);
-            }
-        })
-        .catch((error) => {
-            console.error("Ошибка при добавлении транзакции:", error);
-        });
-
-    // Очищаем поля формы после добавления транзакции
-    setFormData({
-        date: formattedDate,
-        amount: "",
-        type: "Расход",
-        transactionType: [],
-    });
-    setIncomes([{ target: "", amount: parseFloat(0) }]);
+    if (response.status === "success") {
+      setBudget(prevBudget => {
+        const newBudget = [...prevBudget, newTransaction].sort(compareDatesDesc);
+        return newBudget;
+      });
+      setFormData({ date: formattedDate, amount: "", type: "Расход", transactionType: [] });
+      showAddCompliteFunction();
+      setIncomes([{ target: "", amount: 0 }]);
+    } else {
+      console.error(response.message);
+    }
+  } catch (error) {
+    showAddErrorFunction();
+  }
 };
 export function compileIncome(budget) {
     return budget.reduce((total, transaction) => {
@@ -181,13 +138,7 @@ export async function registration(values,
     setErrors) {
 
     try {
-        const response = await axios.post(
-            `${apiEndpoint}add_budget_user`,
-            {
-                userName: values.username,
-                userPass: values.password,
-            }
-        );
+        const response = await sendRequest('add_budget_user', 'post', { userName: values.username, userPass: values.password });
 
         if (response.data.success) {
             setUsername(values.username);
@@ -229,13 +180,7 @@ export async function checkLogin(values,
 ) {
 
     try {
-        const response = await axios.get(`${apiEndpoint}checklogin`, {
-            params: {
-                username: values.username,
-                password: values.password
-            }
-        });
-
+        const response = await sendRequest('checklogin', 'get', null, { username: values.username, password: values.password });
         // Проверяем, успешен ли запрос и код в ответе равен "logined"
         if (response.data.login === "logined") {
             // Устанавливаем состояния в соответствии с успешным входом
@@ -270,7 +215,6 @@ export  async function getCountryCode() {
             throw new Error('Network response was not ok');
         }
         const countryCode = await response.text();
-        console.log(countryCode)
         return countryCode;
     } catch (error) {
         return navigator.language.split('-')[0].toUpperCase();; // Значение по умолчанию

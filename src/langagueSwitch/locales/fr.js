@@ -37,11 +37,15 @@ const fr = {
     tf_income: "Revenu",
     tf_placeholder_target: "Objet de la dépense",
     tf_placeholder_amount: "Montant",
+    tf_error: "Malheureusement, l'action a échoué. Veuillez réessayer plus tard.",
+    tf_complite: "Enregistrement ajouté",
     //edit transaction
     et_update: "mettre à jour",
     et_cancel: "annuler",
     //delete transaction
     dt_delete: "Voulez-vous supprimer l'enregistrement?",
+    dt_error: "Malheureusement, la suppression a échoué, veuillez réessayer plus tard.",
+    dt_complite: "Enregistrement supprimé",
     //transaction controls
     tr_contrl_oldbegin: "Les plus anciens d'abord",
     tr_contrl_newbegin: "Les plus récents d'abord",

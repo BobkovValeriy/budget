@@ -37,11 +37,15 @@ const ua = {
     tf_income: "Дохід",
     tf_placeholder_target: "Ціль витрати",
     tf_placeholder_amount: "Сума",
+    tf_error: "Нажаль дія не вдалась, спробуте пізніше.",
+    tf_complite: "Запис додано",
     //edit transaction
     et_update: "оновити",
     et_cancel: "скасувати",
     //delete transaction
     dt_delete: "Ви бажаєте видалити запис?",
+    dt_error: "На жаль, видалення не вдалося, спробуйте пізніше.",
+    dt_complite: "Запис видалено",
     //transaction controls
     tr_contrl_oldbegin: "Спочатку старі",
     tr_contrl_newbegin: "Спочатку нові",

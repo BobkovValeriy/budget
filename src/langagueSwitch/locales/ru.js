@@ -37,11 +37,15 @@ const ru = {
     tf_income: "Доход",
     tf_placeholder_target: "Цель траты",
     tf_placeholder_amount: "Сумма",
+    tf_error: "К сожалению действие не удалось, попробуйте позже.",
+    tf_complite: "Запись добавлена",
     //edit transaction
     et_update: "обновить",
     et_cancel: "отмена",
     //delete transaction
     dt_delete: "Вы желаете удалить запись?",
+    dt_error: "К сожалению удаление не удалось, попробуйте позже.",
+    dt_complite: "Запись удалена",
     //transaction controls
     tr_contrl_oldbegin: "Сначала старые",
     tr_contrl_newbegin: "Сначала новые",

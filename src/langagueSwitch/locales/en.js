@@ -37,11 +37,15 @@ const en = {
     tf_income: "Income",
     tf_placeholder_target: "Expense target",
     tf_placeholder_amount: "Amount",
+    tf_error: "Unfortunately, the action failed. Please try again later.",
+    tf_complite: "Entry added",
     //edit transaction
     et_update: "update",
     et_cancel: "cancel",
     //delete transaction
     dt_delete: "Do you want to delete this entry?",
+    dt_error: "Unfortunately, deletion failed, please try again later.",
+    dt_complite: "Record deleted",
     //transaction controls
     tr_contrl_oldbegin: "Oldest first",
     tr_contrl_newbegin: "Newest first",
