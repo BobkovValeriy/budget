@@ -99,8 +99,7 @@ export const addRecord = (e, incomes,
         .then((response) => {
             if (response.data.status === "success") {
                 setBudget(prevBudget => {
-                    const newBudget = [...prevBudget, newTransaction];
-                    sortBudget(false, newBudget, setBudget);
+                    const newBudget = [newTransaction, ...prevBudget];
                     return newBudget;
                 });
                 

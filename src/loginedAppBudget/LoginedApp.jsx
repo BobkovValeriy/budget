@@ -22,7 +22,7 @@ function LoginedApp({ username, password}) {
   const text = useSelector((state) => state.langReducer);
   const message = useSelector((state)=> state.app.message)
   const now = new Date();
-  const formattedDate = now.toISOString().split("T")[0];
+  const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   const [budget, setBudget] = useState([]);
   const [formData, setFormData] = useState({
     date: formattedDate,

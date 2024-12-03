@@ -5,6 +5,9 @@ const tutorialReducer = createSlice({
     initialState: {
         tutorialStepsMobile: 0,
         tutorialStepsFullScreen: 0,
+        tutorialRefs: {
+
+        }
     },
     reducers: {
         // Увеличение шага для мобильной версии

@@ -9,8 +9,8 @@ import { German } from "flatpickr/dist/l10n/de.js";
 import { setMessage } from "../../store";
 
 function TransactionForm({
-  handleChange,
   handleSubmit,
+  handleChange,
   formData = {},
   username,
   password,
@@ -71,24 +71,32 @@ function TransactionForm({
     },
     firstDayOfWeek: 1, // Понедельник — первый день недели
   };
+  const localeMapping = {
+    RU: Russian,
+    FR: French,
+    DE: German,
+    UA: Ukrainian,
+    EN: null,
+  };
   useEffect(() => {
-    const localeMapping = {
-      RU: Russian,
-      FR: French,
-      DE: German,
-      UA: Ukrainian,
-      EN: null,
-    };
-
     const locale = localeMapping[lang] || null;
 
-    // Инициализируем Flatpickr с локалью
+    if (datePickerRef.current?._flatpickr) {
+        datePickerRef.current._flatpickr.destroy();
+    }
+
     flatpickr(datePickerRef.current, {
-      locale: locale,
-      dateFormat: "Y-m-d",
-      defaultDate: formattedDate,  // форматированная дата
-    });
-  }, [lang]);
+        locale: locale,
+        dateFormat: "Y-m-d",
+        defaultDate: date, // Актуальное значение
+        onChange: ([selectedDate]) => {
+            const updatedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, "0")}-${String(selectedDate.getDate()).padStart(2, "0")}`;
+            handleChange({
+                target: { name: "date", value: updatedDate },
+              });
+          },
+      });
+    }, [lang, date]);
 
   function showAddErrorFunction(){
     dispatch(setMessage(text.tf_error))
@@ -157,7 +165,8 @@ function TransactionForm({
             type="text"
             id="date"
             name="date"
-            ref={datePickerRef}  // Привязка к рефу
+            ref={datePickerRef}
+            // onChange={handleChange}
             required
           />
         </div>

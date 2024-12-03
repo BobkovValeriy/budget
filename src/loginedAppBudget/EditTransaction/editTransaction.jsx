@@ -1,8 +1,8 @@
 import styles from "./editTransaction.module.scss";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import TransactionForm from "../TransactionForm/TransactionForm";
 import axios from "axios";
-import { downloadBudget, sortBudget, apiEndpoint } from "../../../src/engine";
+import { downloadBudget, apiEndpoint } from "../../../src/engine";
 
 function EditTransaction({
   transactionData,
@@ -26,27 +26,39 @@ function EditTransaction({
   });
   const changeTransactionData = (e) => {
     const { name, value } = e.target;
-    if (name === "transactionType") {
-      const transactionTypesArray = value.split(","); //.map((item) => item.trim())
-      let total = parseFloat(0);
-      transactionTypesArray.forEach((transaction) => {
-        const [typeName, typePrice] = transaction
-          .split(":")
-          .map((item) => item.trim());
-        total += parseFloat(typePrice);
-      });
-      setDataFormForChange({
-        ...dataFormForChange,
-        [name]: transactionTypesArray,
-        amount: total,
-      });
-    } else {
-      setDataFormForChange({
-        ...dataFormForChange,
-        [name]: value,
-      });
-    }
+
+    setDataFormForChange((prevData) => {
+        if (name === "date" && value instanceof Date) {
+            // Если обновляется дата
+            return {
+                ...prevData,
+                date: value,
+            };
+        } else if (name === "transactionType") {
+            // Если обновляется transactionType
+            const transactionTypesArray = value.split(",");
+            let total = 0;
+
+            transactionTypesArray.forEach((transaction) => {
+                const [, typePrice] = transaction.split(":").map((item) => item.trim());
+                total += parseFloat(typePrice);
+            });
+
+            return {
+                ...prevData,
+                [name]: transactionTypesArray,
+                amount: total,
+            };
+        } else {
+            // Для всех остальных случаев
+            return {
+                ...prevData,
+                [name]: value,
+            };
+        }
+    });
   };
+
   const closeEditing = () => {
     setIsEditing(false);
   };
@@ -68,6 +80,7 @@ function EditTransaction({
 
     try {
       // Отправка данных на обновление записи
+      console.log("edit transaction")
       const updateResponse = await axios.post(
         `${apiEndpoint}changeBudgetRecord`,
         {
@@ -83,8 +96,7 @@ function EditTransaction({
         }
       );
       downloadBudget(username, password, setBudget, setReceivedData);
-      sortBudget(false, budget, setBudget);
-      console.log("Запись успешно обновлена!", updateResponse.data);
+      // console.log("Запись успешно обновлена!", updateResponse.data);
       setIsEditing(!isEditing);
     } catch (error) {
       // Обработка ошибок
